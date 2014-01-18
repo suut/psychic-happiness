@@ -35,6 +35,8 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
         print('Command {0} with args {1}'.format(cmd, args))
         if cmd not in ('AUTH', 'LOGOUT'):
             serv.notice(event.source.nick, 'This is not a valid command. Valid commands are AUTH and LOGOUT.')
+        else:
+            pass #TODO
 
     def on_pubmsg(self, serv, event):
         if event.arguments[0][0] == self.cmdprefix:
@@ -49,8 +51,9 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
                 print('command exists!')
                 # calling the function
                 ret = fantasy.binding[cmd](event.source, args)
-                for i in ret.split('\n'):
-                    serv.privmsg(event.target, i)
+                if ret is not None:
+                    for i in ret.split('\n'):
+                        serv.privmsg(event.target, i)
 
         if event.arguments[0][0] == self.adminprefix:
             # it is an admin command
