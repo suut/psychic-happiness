@@ -38,9 +38,6 @@ class Action:
             return self.desc_several.format(names=type(self).sep(self.ppl))
         else:
             return self.desc_alone.format(name=source.nick)
-    def rem_one(self, source, args):
-        if nick in self.ppl:
-            self.ppl.remove(nick)
 
 actions = {}
 
@@ -95,6 +92,9 @@ def sha1(source, args):
     if args is not None:
         return hashlib.sha1(' '.join(args).encode('UTF-8')).hexdigest()
 
+def ping(source, args):
+    return 'pong'
+
 ##############################
 # NO DEFINE BELOW THIS POINT #
 ##############################
@@ -105,7 +105,8 @@ binding = {'reverse':   reverse,
            '8ball': eightball,
            'shorten': shorten,
            'expand': expand,
-           'sha1': sha1}
+           'sha1': sha1,
+           'ping': ping}
 
 for k, v in zip(actions.keys(), actions.values()):
     binding[k] = v.add_one

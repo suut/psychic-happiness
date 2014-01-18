@@ -24,7 +24,7 @@ logged_in = []
 def whoami(source, args):
     """tells you what level of privileges do you have"""
     if source.nick in users.sections():
-        return 'Privilege level: {0}\nPassword: {1}'.format(users[source.nick]['privileges'], users[source.nick]['password'])
+        return 'Privilege level: {0}'.format(users[source.nick]['privileges'])
     else:
         return 'You\'re nobody, lil boy.'
 
