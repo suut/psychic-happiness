@@ -9,6 +9,8 @@ If you are willing to use it, please fill in the proper informations:
 * Your IRC servers and channels in the servers.ini
 * And the selectionned server in config.ini
 
+The irc python module is needed (and it needs the six module), install it via pip or download it from the following link (copy the irc directory to the <python dir>/lib/sites-package/ directory): https://pypi.python.org/pypi/irc
+
 To add more fantasy commands:
 
 Create the function in fantasy.py, it must look like this:
