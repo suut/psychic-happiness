@@ -1,7 +1,7 @@
 psychic-happiness
 =================
 
-An public-domain IRC bot written in Python.
+An public-domain IRC bot written in Python 3.
 
 If you are willing to use it, please fill in the proper informations:
 * Your Google API key in the google.py file
