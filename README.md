@@ -19,15 +19,21 @@ Create the function in fantasy.py, it must look like this:
 
 ```
 def my_func(source, args):
+  """the thing to be printed by the help command"""
   # do something
   return 'this will be printed back to channel'
 ```
-    
-Then add it to the binding dictionnary:
+
+* `source` is a `NickMask` object, use source.nick to know who called the command
+* args is a tuple containing every arguments that was in the command call, if you want to get them back as a plain string, use ' '.join(args)
+* The docstring is mandatory
+* You can use `\n` in the returned string, it will automatically be split into several messages, but most server will get angry if there is more than 3 messages at a time
+
+Then add the function to the binding dictionnary:
 
 ```
 binding = {...,
-           'my_func': my_func}
+           'my_command': my_func}
 ```
 
 How to use the bot:
