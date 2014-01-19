@@ -24,7 +24,7 @@ def my_func(source, args):
   return 'this will be printed back to channel'
 ```
 
-* `source` is a `NickMask` object, use source.nick to know who called the command
+* `source` is a `NickMask` object, use `source.nick` to know who called the command
 * args is a tuple containing every arguments that was in the command call, if you want to get them back as a plain string, use `' '.join(args)`. Calling the command like this `.my_command a b c` will call the function with `args = ('a', 'b', 'c')`, using `' '.join(args)` will return `'a b c'`.
 * The docstring is mandatory
 * You can use `\n` in the returned string, it will automatically be split into several messages, but most server will get angry if there is more than 3 messages at a time
