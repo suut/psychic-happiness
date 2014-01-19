@@ -11,7 +11,7 @@ If you are willing to use it, please fill in the proper informations:
 
 The irc python module is needed (and it needs the six module), install it via pip or download it from the following links (copy the irc directory to the `<python dir>/lib/sites-package/` directory, and run `python install.py install` into the unzipped six dir):
 * https://pypi.python.org/pypi/irc
-* https://pypi.python.org/pypi/six/
+* https://pypi.python.org/pypi/six
 
 To add more fantasy commands:
 
