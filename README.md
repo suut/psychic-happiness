@@ -5,7 +5,7 @@ An public-domain IRC bot written in Python 3.
 
 If you are willing to use it, please fill in the proper informations:
 * Your Google API key in the google.py file
-* The username and password hashed in SHA-1 in the users.ini file
+* The username and password of the admin user hashed in SHA-1 in the users.ini file
 * Your IRC servers and channels in the servers.ini
 * And the selectionned server in config.ini
 
@@ -29,3 +29,8 @@ Then add it to the binding dictionnary:
 binding = {...,
            'my_func': my_func}
 ```
+
+How to use the bot:
+* Type `.help` (replace . with the command prefix you chose) to have a list of all commands, and `.help <command>` to know more about a particular command
+* To auth with the bot, use `/MSG <bot name> AUTH <username> <password>`
+* To logout with the bot, use `/MSG <bot name> LOGOUT`
