@@ -24,7 +24,7 @@ class Action:
         n += names[-1]
         return n
     def add_one(self, source, args):
-        """action"""
+        """action, use -list to list current people and -clear to clear the list out"""
         if args is not None and args[0] == '-list':
             pass
         elif args is not None and args[0] == '-clear':
