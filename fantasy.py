@@ -5,13 +5,6 @@ import configparser, google, random, hashlib
 confparser = configparser.ConfigParser()
 confparser.read('config.ini')
 
-"""
-fantasy protocol:
-    def ...(source, args):
-        ...
-        return value_that_will_be_printed_to_channel
-"""
-
 eightball_answers = confparser['8ball']['answers'].split('\n')
 
 class Action:
@@ -32,12 +25,17 @@ class Action:
         return n
     def add_one(self, source, args):
         """action"""
-        if source.nick not in self.ppl:
+        if args is not None and args[0] == '-list':
+            pass
+        elif args is not None and args[0] == '-clear':
+            self.ppl = []
+            return 'Ok...'
+        elif source.nick not in self.ppl:
             self.ppl.append(source.nick)
         if len(self.ppl) > 1:
             return self.desc_several.format(names=type(self).sep(self.ppl))
         else:
-            return self.desc_alone.format(name=source.nick)
+            return self.desc_alone.format(name=self.ppl[0])
 
 actions = {}
 
