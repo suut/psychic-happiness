@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import irc.bot, fantasy, admin
+from util import unpack
 
 class SpiderBot(irc.bot.SingleServerIRCBot):
     def __init__(self, server, channels, version, cmdprefix, adminprefix):
@@ -27,25 +28,19 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
 
     def on_privmsg(self, serv, event):
         print('PRIVMSG from', event.source.nick)
-        unpacked = event.arguments[0].split(sep=' ')
-        cmd = unpacked[0]
-        args = None
-        if len(unpacked) > 1:
-            args = unpacked[1:]
+        cmd, args = unpack(event.arguments[0])
         print('Command {0} with args {1}'.format(cmd, args))
-        if cmd not in ('AUTH', 'LOGOUT'):
-            serv.notice(event.source.nick, 'This is not a valid command. Valid commands are AUTH and LOGOUT.')
-        else:
-            pass #TODO
+        if cmd in admin.binding.keys():
+            print('command exists!')
+            ret = admin.binding[cmd](event.source, args)
+            if ret is not None:
+                for i in ret.split('\n'):
+                    serv.notice(event.source.nick, i)
 
     def on_pubmsg(self, serv, event):
         if event.arguments[0][0] == self.cmdprefix:
             # it is a command
-            unpacked = event.arguments[0][1:].split(sep=' ')
-            cmd = unpacked[0].lower()
-            args = None
-            if len(unpacked) > 1:
-                args = unpacked[1:]
+            cmd, args = unpack(event.arguments[0][1:])
             print(event.source.nick, 'launched the', cmd, 'command, with the following arguments:', args)
             if cmd in fantasy.binding.keys():
                 print('command exists!')
@@ -57,18 +52,15 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
 
         if event.arguments[0][0] == self.adminprefix:
             # it is an admin command
-            unpacked = event.arguments[0][1:].split(sep=' ')
-            cmd = unpacked[0].lower()
-            args = None
-            if len(unpacked) > 1:
-                args = unpacked[1:]
+            cmd, args = unpack(event.arguments[0][1:])
             print(event.source.nick, 'launched the', cmd, 'admin command, with the following arguments:', args)
             if cmd in admin.binding.keys():
                 print('command exists!')
                 # calling the function
                 ret = admin.binding[cmd](event.source, args)
-                for i in ret.split('\n'):
-                    serv.privmsg(event.target, i)
+                if ret is not None:
+                    for i in ret.split('\n'):
+                        serv.privmsg(event.target, i)
 
     def get_version(self):
         return self.version
