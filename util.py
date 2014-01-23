@@ -25,3 +25,11 @@ class ServerSpec(irc.bot.ServerSpec):
         super().__init__(host, port, password)
         self.nickname = nickname
         self.realname = realname
+
+def unpack(raw):
+    unpacked = raw.split(sep=' ')
+    cmd = unpacked[0].lower()
+    args = None
+    if len(unpacked) > 1:
+        args = unpacked[1:]
+    return (cmd, args)
