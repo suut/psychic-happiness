@@ -26,7 +26,8 @@ class Action:
     def add_one(self, source, args):
         """action, use -list to list current people and -clear to clear the list out"""
         if args is not None and args[0] == '-list':
-            pass
+            if len(self.ppl) == 0:
+                return 'Nobody!'
         elif args is not None and args[0] == '-clear':
             self.ppl = []
             return 'Ok...'
@@ -47,8 +48,11 @@ for k, v in zip(raw_actions.keys(), raw_actions.values()):
 
 def eightball(source, args):
     """will answer your deepest questions"""
-    seed = hash(' '.join(args).strip())
-    return eightball_answers[seed%len(eightball_answers)]
+    if args is not None:
+        seed = hash(' '.join(args).strip())
+        return eightball_answers[seed%len(eightball_answers)]
+    else:
+        return 'What?'
 
 def reverse(source, args):
     """returns the reversed representation of a string"""
