@@ -23,7 +23,7 @@ class Action:
             n += i+j
         n += names[-1]
         return n
-    def add_one(self, source, args):
+    def add_one(self, serv, bot, event, args):
         """action, use -list to list current people and -clear to clear the list out"""
         if args is not None and args[0] == '-list':
             if len(self.ppl) == 0:
@@ -31,8 +31,8 @@ class Action:
         elif args is not None and args[0] == '-clear':
             self.ppl = []
             return 'Ok...'
-        elif source.nick not in self.ppl:
-            self.ppl.append(source.nick)
+        elif event.source.nick not in self.ppl:
+            self.ppl.append(event.source.nick)
         if len(self.ppl) > 1:
             return self.desc_several.format(names=type(self).sep(self.ppl))
         else:
@@ -46,7 +46,7 @@ for k, v in zip(raw_actions.keys(), raw_actions.values()):
     action = Action(*v.split(';'))
     actions[k] = action
 
-def eightball(source, args):
+def eightball(serv, bot, event, args):
     """will answer your deepest questions"""
     if args is not None:
         seed = hash(' '.join(args).strip())
@@ -54,49 +54,53 @@ def eightball(source, args):
     else:
         return 'What?'
 
-def reverse(source, args):
+def reverse(serv, bot, event, args):
     """returns the reversed representation of a string"""
     if args is not None:
         return ''.join(reversed(' '.join(args))).strip()
 
-def utf8(source, args):
+def utf8(serv, bot, event, args):
     """some kind of way to test if UTF-8 is functionning correctly"""
     return 'На берегу пустынных волн'
 
-def search(source, args):
+def search(serv, bot, event, args):
     """performs a google search and return the 1st result"""
     if args is not None:
         q = google.SearchQuery(' '.join(args))
         try:
             r = google.query(q)
-        except KeyError:
+        except BaseException as e:
             return 'No result found.'
         return r.display()
     else:
         return 'No query specified.'
 
-def shorten(source, args):
+def shorten(serv, bot, event, args):
     """shorten an url"""
     if args is not None:
         return google.shortenUrl(' '.join(args))
     else:
         return 'No URL specified.'
 
-def expand(source, args):
+def expand(serv, bot, event, args):
     """expands a shortened url"""
     if args is not None:
         return google.expandUrl(' '.join(args))
     else:
         return 'No URL specified.'
 
-def sha1(source, args):
+def sha1(serv, bot, event, args):
     """hash a string with the SHA-1 algorithm"""
     if args is not None:
         return hashlib.sha1(' '.join(args).encode('UTF-8')).hexdigest()
 
-def ping(source, args):
+def ping(serv, bot, event, args):
     """just try it"""
     return 'pong'
+
+def masshl(serv, bot, event, args):
+    """boom!"""
+    return ' '.join(bot.channels[event.target].users())
 
 ##############################
 # NO DEFINE BELOW THIS POINT #
@@ -109,12 +113,13 @@ binding = {'reverse':   reverse,
            'shorten': shorten,
            'expand': expand,
            'sha1': sha1,
-           'ping': ping}
+           'ping': ping,
+           'masshl': masshl}
 
 for k, v in zip(actions.keys(), actions.values()):
     binding[k] = v.add_one
 
-def doc(source, args): # defining it later because we need the binding dict
+def doc(serv, bot, event, args): # defining it later because we need the binding dict
     """provides help for fantasy commands"""
     if args is None or ''.join(args).strip() == '':
         return 'Available fantasy commands: {0}\ntype {1}help <command> to know more about a specific command.' .format(', '.join(binding.keys()), confparser['bot']['cmdprefix'])

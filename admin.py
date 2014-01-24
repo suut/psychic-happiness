@@ -5,7 +5,7 @@ from util import Enum
 
 """
 admnin protocol:
-    def ...(serv, bot, source, args):
+    def ...(serv, bot, event, args):
         ...
         return value_that_will_be_printed_to_channel
 """
@@ -38,9 +38,9 @@ class LoggedIn:
 
 logged_in = []
 
-def whoami(serv, bot, source, args):
+def whoami(serv, bot, event, args):
     for i in logged_in:
-        if source.userhost == i.userhost:
+        if event.source.userhost == i.userhost:
             ret = 'You\'re logged in.\n'
             if int(users[i.username]['privileges']) & privileges.master:
                 ret += 'You\'re master.'
@@ -51,7 +51,7 @@ def whoami(serv, bot, source, args):
             return ret
     return 'You\'re nobody, lil boy.'
 
-def auth(serv, bot, source, args):
+def auth(serv, bot, event, args):
     unpacked = ' '.join(args).strip().split(' ')
     if len(unpacked) != 2:
         return 'Invalid arguments. Usage: auth <username> <password>'
@@ -60,21 +60,22 @@ def auth(serv, bot, source, args):
         return 'Unknown username.'
     if users[username]['password'] != hashlib.sha1(password.encode('UTF-8')).hexdigest():
         return 'Invalid password.'
-    logged_in.append(LoggedIn(source, username))
+    logged_in.append(LoggedIn(event.source, username))
     return 'You\'re successfully logged in!'
 
-def logout(serv, bot, source, args):
+def logout(serv, bot, event, args):
     for i in logged_in:
-        if i.userhost == source.userhost:
+        if i.userhost == event.source.userhost:
             logged_in.remove(i)
             return 'Successfully logged out.'
     return 'You\'re not logged in.'
 
-def die(serv, bot, source, args):
+def die(serv, bot, event, args):
     for i in logged_in:
-        if source.userhost == i.userhost:
+        if event.source.userhost == i.userhost:
             if int(users[i.username]['privileges']) & privileges.admin or int(users[i.username]['privileges']) & privileges.master:
-                bot.disconnect('die command used by {0}'.format(source.nick))
+                bot.disconnect('die command used by {0}'.format(event.source.nick))
+                exit(0)
             else:
                 return 'Not sufficent privileges, need at least admin capabilities.'
     return 'You\'re not logged in.'
