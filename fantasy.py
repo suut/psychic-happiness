@@ -95,6 +95,7 @@ def sha1(source, args):
         return hashlib.sha1(' '.join(args).encode('UTF-8')).hexdigest()
 
 def ping(source, args):
+    """just try it"""
     return 'pong'
 
 ##############################
