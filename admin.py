@@ -5,7 +5,7 @@ from util import Enum
 
 """
 admnin protocol:
-    def ...(source, args):
+    def ...(serv, bot, source, args):
         ...
         return value_that_will_be_printed_to_channel
 """
@@ -38,7 +38,7 @@ class LoggedIn:
 
 logged_in = []
 
-def whoami(source, args):
+def whoami(serv, bot, source, args):
     for i in logged_in:
         if source.userhost == i.userhost:
             ret = 'You\'re logged in.\n'
@@ -51,7 +51,7 @@ def whoami(source, args):
             return ret
     return 'You\'re nobody, lil boy.'
 
-def auth(source, args):
+def auth(serv, bot, source, args):
     unpacked = ' '.join(args).strip().split(' ')
     if len(unpacked) != 2:
         return 'Invalid arguments. Usage: auth <username> <password>'
@@ -63,18 +63,18 @@ def auth(source, args):
     logged_in.append(LoggedIn(source, username))
     return 'You\'re successfully logged in!'
 
-def logout(source, args):
+def logout(serv, bot, source, args):
     for i in logged_in:
         if i.userhost == source.userhost:
             logged_in.remove(i)
             return 'Successfully logged out.'
     return 'You\'re not logged in.'
 
-def die(source, args):
+def die(serv, bot, source, args):
     for i in logged_in:
         if source.userhost == i.userhost:
             if int(users[i.username]['privileges']) & privileges.admin or int(users[i.username]['privileges']) & privileges.master:
-                exit(0)
+                bot.disconnect('die command used by {0}'.format(source.nick))
             else:
                 return 'Not sufficent privileges, need at least admin capabilities.'
     return 'You\'re not logged in.'

@@ -32,7 +32,7 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
         print('Command {0} with args {1}'.format(cmd, args))
         if cmd in admin.binding.keys():
             print('command exists!')
-            ret = admin.binding[cmd](event.source, args)
+            ret = admin.binding[cmd](serv, self, event.source, args)
             if ret is not None:
                 for i in ret.split('\n'):
                     serv.notice(event.source.nick, i)
@@ -57,7 +57,7 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
             if cmd in admin.binding.keys():
                 print('command exists!')
                 # calling the function
-                ret = admin.binding[cmd](event.source, args)
+                ret = admin.binding[cmd](serv, self, event.source, args)
                 if ret is not None:
                     for i in ret.split('\n'):
                         serv.privmsg(event.target, i)
