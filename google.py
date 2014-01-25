@@ -3,7 +3,7 @@
 import util, urllib.request, urllib.parse, json
 
 credentials = util.Enum(cx='014536238855530140254:0_ky19vmquw',
-                        key='')
+                        key='AIzaSyBh5_ax2hIZVsMUoyFEVEC3XH8fKEUZ8HQ')
 
 class SearchQuery:
     def __init__(self, query, cred=credentials, quotaUser='', prettyPrint='false', safe='off', lang='en', nb=1, index=1):

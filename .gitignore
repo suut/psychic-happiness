@@ -216,5 +216,3 @@ pip-log.txt
 
 *.sln
 *.pyproj
-servers.ini
-users.ini

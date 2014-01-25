@@ -4,8 +4,11 @@ import configparser, google, random, hashlib
 
 confparser = configparser.ConfigParser()
 confparser.read('config.ini')
+actionsparser = configparser.ConfigParser()
+actionsparser.read('actions.ini')
 
-eightball_answers = confparser['8ball']['answers'].split('\n')
+with open('8ball.txt') as file:
+    eightball_answers = file.read().split('\n')
 
 class Action:
     def __init__(self, desc_alone, desc_several):
@@ -40,7 +43,7 @@ class Action:
 
 actions = {}
 
-raw_actions = confparser['actions']
+raw_actions = actionsparser['actions']
 
 for k, v in zip(raw_actions.keys(), raw_actions.values()):
     action = Action(*v.split(';'))
