@@ -33,3 +33,6 @@ def unpack(raw):
     if len(unpacked) > 1:
         args = unpacked[1:]
     return (cmd, args)
+
+def split_len(seq, length):
+    return [seq[i:i+length] for i in range(0, len(seq), length)]

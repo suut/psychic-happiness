@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import irc.bot, fantasy, admin
-from util import unpack
+from util import unpack, split_len
 
 class SpiderBot(irc.bot.SingleServerIRCBot):
     def __init__(self, server, channels, version, cmdprefix, adminprefix):
@@ -35,7 +35,8 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
             ret = admin.binding[cmd](serv, self, event, args)
             if ret is not None:
                 for i in ret.split('\n'):
-                    serv.notice(event.source.nick, i)
+                    for j in split_len(i.encode(), 470):
+                        serv.notice(event.source.nick, j.decode())
 
     def on_pubmsg(self, serv, event):
         if event.arguments[0][0] == self.cmdprefix:
@@ -48,7 +49,8 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
                 ret = fantasy.binding[cmd](serv, self, event, args)
                 if ret is not None:
                     for i in ret.split('\n'):
-                        serv.privmsg(event.target, i)
+                        for j in split_len(i.encode(), 470):
+                            serv.privmsg(event.target, j.decode())
 
         if event.arguments[0][0] == self.adminprefix:
             # it is an admin command
@@ -60,7 +62,8 @@ class SpiderBot(irc.bot.SingleServerIRCBot):
                 ret = admin.binding[cmd](serv, self, event, args)
                 if ret is not None:
                     for i in ret.split('\n'):
-                        serv.privmsg(event.target, i)
+                        for j in split_len(i.encode(), 470):
+                            serv.privmsg(event.target, j.decode())
 
     def get_version(self):
         return self.version

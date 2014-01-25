@@ -11,6 +11,9 @@ with open('strings/8ball.txt') as file:
 with open('strings/abuse.txt') as file: # for the flame command
     flame_strs = file.read().split('\n')
 
+with open('strings/quotes.txt') as file:
+    quote_strs = file.read().split('\n')
+
 class Action:
     def __init__(self, desc_alone, desc_several):
         self.desc_alone = desc_alone
@@ -108,7 +111,17 @@ def masshl(serv, bot, event, args):
 
 def flame(serv, bot, event, args):
     """somebody did something wrong? flame him/her!"""
-    serv.action(event.target, flame_strs[random.randrange(0, len(flame_strs))].format(user=' '.join(args).strip()))
+    if args is not None:
+        serv.action(event.target, flame_strs[random.randrange(0, len(flame_strs))].format(user=' '.join(args).strip()))
+    else:
+        return 'Fuck off, little guy.'
+
+def quote(serv, bot, event, args):
+    return quote_strs[random.randrange(0, len(quote_strs))]
+
+def blabla(serv, bot, event, args):
+    """o"""
+    return 1024*'o'
 
 ##############################
 # NO DEFINE BELOW THIS POINT #
@@ -123,7 +136,9 @@ binding = {'reverse':   reverse,
            'sha1': sha1,
            'ping': ping,
            'masshl': masshl,
-           'flame': flame}
+           'flame': flame,
+           'quote': quote,
+           'blabla': blabla}
 
 for k, v in zip(actions.keys(), actions.values()):
     binding[k] = v.add_one
