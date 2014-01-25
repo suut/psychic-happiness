@@ -38,5 +38,9 @@ binding = {...,
 
 How to use the bot:
 * Type `.help` (replace . with the command prefix you chose) to have a list of all commands, and `.help <command>` to know more about a particular command
-* To auth with the bot, use `/MSG <bot name> AUTH <username> <password>`
-* To logout with the bot, use `/MSG <bot name> LOGOUT`
+* To auth with the bot, use `/MSG <bot name> auth <username> <password>`
+* To logout with the bot, use `/MSG <bot name> logout`
+* To make him join a channel, use `/MSG <bot name> join [channel]`. You can specify several channels by separating them with a comma. If the channel is omitted, the bot will join default channels.
+* To make him part a channel, use `/MSG <bot name> <channel>`.
+
+NOTE: Every admin command (`/MSG <bot name> <command>`) is available on channels where the bot is, by prefixing the command name by the admin prefix (default `~`). For instance, `~part` on a channel will make the bot part that channel. It is strongly advised against to use the `auth` command on a channel...:)
