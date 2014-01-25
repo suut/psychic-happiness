@@ -3,11 +3,11 @@
 import configparser, google, random, hashlib
 
 confparser = configparser.ConfigParser()
-confparser.read('config.ini')
+confparser.read('config/config.ini')
 actionsparser = configparser.ConfigParser()
-actionsparser.read('actions.ini')
+actionsparser.read('strings/actions.ini')
 
-with open('8ball.txt') as file:
+with open('strings/8ball.txt') as file:
     eightball_answers = file.read().split('\n')
 
 class Action:

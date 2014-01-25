@@ -7,8 +7,8 @@ import IRCBot, configparser, util
 confparser = configparser.ConfigParser()
 servparser = configparser.ConfigParser()
 
-confparser.read('config.ini')
-servparser.read('servers.ini')
+confparser.read('config/config.ini')
+servparser.read('config/servers.ini')
 
 chosen_server = confparser['connect']['server']
 

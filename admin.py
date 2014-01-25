@@ -13,7 +13,7 @@ admnin protocol:
 encode_passwd = lambda s: hashlib.sha1(s.encode('UTF-8')).hexdigest()
 
 users = configparser.ConfigParser()
-users.read('users.ini')
+users.read('config/users.ini')
 
 privileges = Enum({'known':  1<<0,
                    'master': 1<<1,
