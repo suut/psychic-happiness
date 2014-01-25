@@ -14,6 +14,12 @@ with open('strings/abuse.txt') as file: # for the flame command
 with open('strings/quotes.txt') as file:
     quote_strs = file.read().split('\n')
 
+with open('strings/fortunes.txt') as file:
+    fortune_strs = file.read().split('\n')
+
+with open('strings/insults.txt') as file:
+    insult_strs = file.read().split('\n')
+
 class Action:
     def __init__(self, desc_alone, desc_several):
         self.desc_alone = desc_alone
@@ -117,11 +123,20 @@ def flame(serv, bot, event, args):
         return 'Fuck off, little guy.'
 
 def quote(serv, bot, event, args):
+    """quotes from great men"""
     return quote_strs[random.randrange(0, len(quote_strs))]
 
 def blabla(serv, bot, event, args):
-    """o"""
+    """1024*'o'"""
     return 1024*'o'
+
+def fortune(serv, bot, event, args):
+    """like in the cookies!"""
+    return fortune_strs[random.randrange(0, len(fortune_strs))]
+
+def insult(serv, bot, event, args):
+    """fuck you"""
+    return insult_strs[random.randrange(0, len(insult_strs))]
 
 ##############################
 # NO DEFINE BELOW THIS POINT #
@@ -138,7 +153,9 @@ binding = {'reverse':   reverse,
            'masshl': masshl,
            'flame': flame,
            'quote': quote,
-           'blabla': blabla}
+           'blabla': blabla,
+           'fortunes': fortune,
+           'insult': insult}
 
 for k, v in zip(actions.keys(), actions.values()):
     binding[k] = v.add_one
