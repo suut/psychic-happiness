@@ -2,13 +2,13 @@
 
 import configparser, google, random, hashlib
 
-confparser = configparser.ConfigParser()
-confparser.read('config/config.ini')
 actionsparser = configparser.ConfigParser()
 actionsparser.read('strings/actions.ini')
-
 with open('strings/8ball.txt') as file:
     eightball_answers = file.read().split('\n')
+
+with open('strings/abuse.txt') as file:
+    flame_strs = file.read().split('\n')
 
 class Action:
     def __init__(self, desc_alone, desc_several):
@@ -105,6 +105,10 @@ def masshl(serv, bot, event, args):
     """boom!"""
     return ' '.join(bot.channels[event.target].users())
 
+def flame(serv, bot, event, args):
+    """somebody did something wrong? flame him/her!"""
+    serv.action(event.target, flame_strs[random.randrange(0, len(flame_strs))].format(user=' '.join(args).strip()))
+
 ##############################
 # NO DEFINE BELOW THIS POINT #
 ##############################
@@ -117,7 +121,8 @@ binding = {'reverse':   reverse,
            'expand': expand,
            'sha1': sha1,
            'ping': ping,
-           'masshl': masshl}
+           'masshl': masshl,
+           'flame': flame}
 
 for k, v in zip(actions.keys(), actions.values()):
     binding[k] = v.add_one
@@ -125,7 +130,7 @@ for k, v in zip(actions.keys(), actions.values()):
 def doc(serv, bot, event, args): # defining it later because we need the binding dict
     """provides help for fantasy commands"""
     if args is None or ''.join(args).strip() == '':
-        return 'Available fantasy commands: {0}\ntype {1}help <command> to know more about a specific command.' .format(', '.join(binding.keys()), confparser['bot']['cmdprefix'])
+        return 'Available fantasy commands: {0}\ntype {1}help <command> to know more about a specific command.' .format(', '.join(binding.keys()), bot.cmdprefix)
     else:
         cmdname = ''.join(args)
         if cmdname in binding:
