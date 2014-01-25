@@ -38,17 +38,32 @@ class LoggedIn:
 
 logged_in = []
 
-def whoami(serv, bot, event, args):
+def is_logged_in(userhost):
     for i in logged_in:
-        if event.source.userhost == i.userhost:
-            ret = 'You\'re logged in.\n'
-            if int(users[i.username]['privileges']) & privileges.master:
-                ret += 'You\'re master.'
-            elif int(users[i.username]['privileges']) & privileges.admin:
-                ret += 'You\'re admin.'
-            elif int(users[i.username]['privileges']) & privileges.known:
-                ret += 'You\'re known.'
-            return ret
+        if i.userhost == userhost:
+            return True
+    return False
+
+def get_login(userhost):
+    for i in logged_in:
+        if i.userhost == userhost:
+            return i
+    return None
+
+######################
+# BEGGINING COMMANDS #
+######################
+
+def whoami(serv, bot, event, args):
+    if is_logged_in(event.source.userhost):
+        ret = 'You\'re logged in.\n'
+        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.master:
+            ret += 'You\'re master.'
+        elif int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin:
+            ret += 'You\'re admin.'
+        elif int(users[get_login(event.source.userhost).username]['privileges']) & privileges.known:
+            ret += 'You\'re known.'
+        return ret
     return 'You\'re nobody, lil boy.'
 
 def auth(serv, bot, event, args):
@@ -64,21 +79,46 @@ def auth(serv, bot, event, args):
     return 'You\'re successfully logged in!'
 
 def logout(serv, bot, event, args):
-    for i in logged_in:
-        if i.userhost == event.source.userhost:
-            logged_in.remove(i)
-            return 'Successfully logged out.'
+    if is_logged_in(event.source.userhost):
+        logged_in.remove(get_login(event.source.userhost))
+        return 'Successfully logged out.'
     return 'You\'re not logged in.'
 
 def die(serv, bot, event, args):
-    for i in logged_in:
-        if event.source.userhost == i.userhost:
-            if int(users[i.username]['privileges']) & privileges.admin or int(users[i.username]['privileges']) & privileges.master:
-                bot.disconnect('die command used by {0}'.format(event.source.nick))
-                exit(0)
-            else:
-                return 'Not sufficent privileges, need at least admin capabilities.'
+    if is_logged_in(event.source.userhost):
+        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin or int(users[get_login(event.source.userhost).username]['privileges']) & privileges.master:
+            bot.disconnect('die command used by {0}'.format(event.source.nick))
+            exit(0)
+        else:
+            return 'Not sufficent privileges, need at least admin capabilities.'
     return 'You\'re not logged in.'
+
+def join(serv, bot, event, args):
+    if is_logged_in(event.source.userhost):
+        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin or int(users[get_login(event.source.userhost).username]['privileges']) & privileges.master or int(users[get_login(event.source.userhost).username]['privileges']) & privileges.known:
+            if args is not None:
+                for chan in ''.join(args).split(','):
+                    serv.join(chan)
+            else:
+                for chan in bot._channels:
+                    serv.join(chan)
+                return 'No channel specified, joining default channels'
+        else:
+            return 'Not sufficent privileges, need at least known capabilities.'
+    else:
+        return 'You\'re not logged in.'
+
+def part(serv, bot, event, args):
+    if is_logged_in(event.source.userhost):
+        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin or int(users[get_login(event.source.userhost).username]['privileges']):
+            if args is not None:
+                serv.part(''.join(args), 'part command used by {0}'.format(event.source.nick))
+            else:
+                serv.part(event.target, 'part command used by {0}'.format(event.source.nick))
+        else:
+            return 'Not sufficent privileges, need at least admin capabilities.'
+    else:
+        return 'You\'re not logged in.'
 
 ##############################
 # NO DEFINE BELOW THIS POINT #
@@ -87,4 +127,6 @@ def die(serv, bot, event, args):
 binding = {'whoami': whoami,
            'auth': auth,
            'logout': logout,
-           'die': die}
+           'die': die,
+           'join': join,
+           'part': part}

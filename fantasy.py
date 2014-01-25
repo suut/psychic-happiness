@@ -3,11 +3,12 @@
 import configparser, google, random, hashlib
 
 actionsparser = configparser.ConfigParser()
-actionsparser.read('strings/actions.ini')
-with open('strings/8ball.txt') as file:
-    eightball_answers = file.read().split('\n')
+actionsparser.read('strings/actions.ini') # to use the actions commands, like nommin or stuff
 
-with open('strings/abuse.txt') as file:
+with open('strings/8ball.txt') as file:
+    eightball_answers = file.read().split('\n') # for the 8ball command
+
+with open('strings/abuse.txt') as file: # for the flame command
     flame_strs = file.read().split('\n')
 
 class Action:
