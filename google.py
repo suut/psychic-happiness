@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import util, urllib.request, urllib.parse, json
+import util, urllib.request, urllib.parse, json, configparser
 
-credentials = util.Enum(cx='014536238855530140254:0_ky19vmquw',
-                        key='AIzaSyBh5_ax2hIZVsMUoyFEVEC3XH8fKEUZ8HQ')
+cparser = configparser.ConfigParser()
+cparser.read('config/config.ini')
+
+credentials = util.Enum(cx=cparser['google']['cx'],
+                        key=cparser['google']['key'])
 
 class SearchQuery:
     def __init__(self, query, cred=credentials, quotaUser='', prettyPrint='false', safe='off', lang='en', nb=1, index=1):
