@@ -8,8 +8,8 @@ cparser.read('config/config.ini')
 credentials = util.Enum(cx=cparser['google']['cx'],
                         key=cparser['google']['key'])
 
-class SearchQuery:
-    def __init__(self, query, cred=credentials, quotaUser='', prettyPrint='false', safe='off', lang='en', nb=1, index=1):
+class SearchQuery:  
+    def __init__(self, query, cred=credentials, quotaUser='', prettyPrint='false', safe=cparser['google']['safesearch'], lang=cparser['google']['lang'], nb=1, index=1):
         self.params = {'prettyPrint': prettyPrint,
                        'quoteUser': quotaUser,
                        'cx': cred.cx,
