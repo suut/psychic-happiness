@@ -44,7 +44,7 @@ class SearchResponse:
         return self._item['displayLink']
     @property
     def abstract(self):
-        return self._item['snippet'].replace('\n', ' ').replace('\xA0', '')
+        return self._item['snippet'].replace('\n', '').replace('\xA0', '')
     def display(self):
         return '{0} - {1}\n{2}\n{3}'.format(self.display_url, self.title, self.abstract, self.link)
 

@@ -70,7 +70,7 @@ def eightball(serv, bot, event, args):
 def reverse(serv, bot, event, args):
     """returns the reversed representation of a string"""
     if args is not None:
-        return ''.join(reversed(' '.join(args))).strip()
+        return ' '.join(args)[::-1].strip()
 
 def utf8(serv, bot, event, args):
     """some kind of way to test if UTF-8 is functionning correctly"""
