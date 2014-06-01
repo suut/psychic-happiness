@@ -29,12 +29,14 @@ def my_func(args, source, target):
 
 Note: every command can be sent to the bot via channel msg, or via privmsg
 ### Admin commands
-* Know if you're authed: `whoami`
-* Logging in: `AUTH username password` (preferable to do it via privmsg...:))
-* Change nick (`master` required): `NICK newnickname`
-* Quit (`master` required): `DIE [reason]`
-* Join a channel (`admin` required): `JOIN #channel`
-* Part a channel (`admin` required): `part #channel [reason]` or `part [reason]` when done on the target chan
-* Notice an user/channel (`known` required): `NOTICE user message`
-* Performs an action on a channel (`known` required): `ACT #channel action`
-* Say something on a channel (`known` required): `SAY #channel message`
+| Description                     | Requires | Usage                                                                    |
+| :-----------------------------: | :------: | :----------------------------------------------------------------------: |
+| Know if you're authed           |          | `WHOAMI`                                                                 |
+| To log in                       |          | `AUTH username password` (use that only in privmsg..)                    |
+| Change nick                     | `master` | `NICK newnickname`                                                       |
+| Quit                            | `master` | `DIE [reason]`                                                           |
+| Join a channel                  | `admin`  | `JOIN #channel`                                                          |
+| Part a channel                  | `admin`  | `part #channel [reason]` or `part [reason]` (when on the target channel) |
+| Notice an user/channel          | `known`  | `NOTICE user message`                                                    |
+| Performs an action on a channel | `known`  | `ACT #channel action`                                                    |
+| Say something on a channel      | `known`  | `SAY #channel message`                                                   |
