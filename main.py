@@ -1,36 +1,24 @@
+#!/usr/bin/python3.2
 # -*- coding: utf-8 -*-
 
-import IRCBot, configparser, util
+# IRC bot
+# Roadmap:
+#   [X] Functions core
+#   [X] Bot backbone
+#   [X] Server loader
+#   [ ] Per-server config loader
+#   [ ] Functions registry
+#   [ ] Highest priority functions (auth)
+# /!\ NO GLOBAL CONF, ONLY PER-SERVER CONF /!\
+# when config changes, (1) apply it OTF,
+#              (2) save it immediately to disk
 
-# let's parse the config options
+#TODO: saveconfig(), rehash()
 
-confparser = configparser.ConfigParser()
-servparser = configparser.ConfigParser()
+import functions, admin #for the code to be executed
+from core import chosen_server
+from superbot import SuperBot
 
-confparser.read('config/config.ini')
-servparser.read('config/servers.ini')
-
-chosen_server = confparser['connect']['server']
-
-# let's verify if the server is defined in the servers.ini file
-
-assert chosen_server in servparser.sections(), 'server does not exist'
-
-serv_details = servparser[chosen_server]
-
-password = None
-channels = None
-
-if serv_details['password'] != '':
-    password = serv_details['password']
-
-if serv_details['channels'] != '':
-    channels = serv_details['channels'].split(',')
-
-server = util.ServerSpec(serv_details['host'], serv_details['nickname'], serv_details['realname'], int(serv_details['port']), password)
-
-bot = IRCBot.SpiderBot(server, channels, confparser['misc']['version'], confparser['bot']['cmdprefix'], confparser['bot']['adminprefix'])
-
-bot.connection.buffer_class.encoding = serv_details['charset']
+bot = SuperBot(chosen_server)
 
 bot.start()

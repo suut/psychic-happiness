@@ -1,132 +1,118 @@
+#!/usr/bin/python3.2
 # -*- coding: utf-8 -*-
 
-import hashlib, configparser
-from util import Enum
+# Differents auth level:
+#   * master
+#   * admin
+#   * known
 
-"""
-admnin protocol:
-    def ...(serv, bot, event, args):
-        ...
-        return value_that_will_be_printed_to_channel
-"""
+from functions_core import Function
+from core import ToSend
+import hashlib
+from auth_core import uparser, loggedin, LoggedIn, getinfos, require
 
-encode_passwd = lambda s: hashlib.sha1(s.encode('UTF-8')).hexdigest()
 
-users = configparser.ConfigParser()
-users.read('config/users.ini')
+@Function('auth', requestserv=True)
+def auth(args, source, target, serv):
+    # args should be (username, password)
+    if args is None or len(args) != 2:
+        serv.notice(source.nick, 'usage: AUTH username password')
+        return
+    if args[0] not in uparser.sections():
+        serv.notice(source.nick, 'unknown user')
+        return
+    if hashlib.sha1(args[1].encode()).hexdigest() != uparser[args[0]]['password']:
+        serv.notice(source.nick, 'invalid password')
+        return
+    for user in loggedin:
+        if user.host == source.userhost:
+            serv.notice(source.nick, 'you\'re already logged in')
+            return
+    loggedin.append(LoggedIn(args[0], source.userhost))
+    serv.notice(source.nick, 'you\'re now logged in')
 
-privileges = Enum({'known':  1<<0,
-                   'master': 1<<1,
-                   'admin':  1<<2})
 
-class LoggedIn:
-    def __init__(self, nickmask, username):
-        self.nickmask = nickmask
-        self.username = username
-    @property
-    def nick(self):
-        return self.nickmask.nick
-    @property
-    def userhost(self):
-        return self.nickmask.userhost
-    @property
-    def host(self):
-        return self.nickmask.host
-    @property
-    def user(self):
-        return self.nickmask.user
+@Function('whoami')
+def whoami(args, source, target):
+    ret = getinfos(source.userhost)
+    if ret is None and source.nick.lower() == 'sarah':
+        return ToSend(target, 'you\'re the most beautiful one')
+    #TODO: to remove one day
+    if ret is None:
+        return ToSend(target, 'you\'re nobody')
+    return ToSend(target, 'you\'re {0} ({1})'.format(ret['uname'], ret['level']))
 
-logged_in = []
+@Function('say', requestserv=True, authlvl='known')
+def say(args, source, target, serv):
+    r = require(source, 'known')
+    if r is not None:
+        return ToSend(target, r)
+    # args should be (chan, text)
+    if args is None or len(args) < 2:
+        serv.notice(source.nick, 'args should be (chan, text)')
+        return
+    serv.privmsg(args[0], ' '.join(args[1:]))
 
-def is_logged_in(userhost):
-    for i in logged_in:
-        if i.userhost == userhost:
-            return True
-    return False
+@Function('act', requestserv=True, authlvl='known')
+def act(args, source, target, serv):
+    # args should be (chan, text)
+    if args is None or len(args) < 2:
+        serv.notice(source.nick, 'args should be (chan, text)')
+        return
+    serv.action(args[0], ' '.join(args[1:]))
 
-def get_login(userhost):
-    for i in logged_in:
-        if i.userhost == userhost:
-            return i
-    return None
+@Function('nick', requestserv=True, authlvl='master')
+def nick(args, source, target, serv):
+    if args is None or len(args) != 1:
+        serv.notice(source.nick, 'args should be newnickname')
+        return
+    serv.nick(args[0])
 
-######################
-# BEGGINING COMMANDS #
-######################
+@Function('join', requestserv=True, authlvl='admin')
+def join(args, source, target, serv):
+    if args is None or len(args) != 1:
+        serv.notice(source.nick, 'args should be channel')
+        return
+    serv.join(args[0])
 
-def whoami(serv, bot, event, args):
-    if is_logged_in(event.source.userhost):
-        ret = 'You\'re logged in.\n'
-        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.master:
-            ret += 'You\'re master.'
-        elif int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin:
-            ret += 'You\'re admin.'
-        elif int(users[get_login(event.source.userhost).username]['privileges']) & privileges.known:
-            ret += 'You\'re known.'
-        return ret
-    return 'You\'re nobody, lil boy.'
-
-def auth(serv, bot, event, args):
-    unpacked = ' '.join(args).strip().split(' ')
-    if len(unpacked) != 2:
-        return 'Invalid arguments. Usage: auth <username> <password>'
-    username, password = unpacked
-    if username not in users.sections():
-        return 'Unknown username.'
-    if users[username]['password'] != hashlib.sha1(password.encode('UTF-8')).hexdigest():
-        return 'Invalid password.'
-    logged_in.append(LoggedIn(event.source, username))
-    return 'You\'re successfully logged in!'
-
-def logout(serv, bot, event, args):
-    if is_logged_in(event.source.userhost):
-        logged_in.remove(get_login(event.source.userhost))
-        return 'Successfully logged out.'
-    return 'You\'re not logged in.'
-
-def die(serv, bot, event, args):
-    if is_logged_in(event.source.userhost):
-        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin or int(users[get_login(event.source.userhost).username]['privileges']) & privileges.master:
-            bot.disconnect('die command used by {0}'.format(event.source.nick))
-            exit(0)
-        else:
-            return 'Not sufficent privileges, need at least admin capabilities.'
-    return 'You\'re not logged in.'
-
-def join(serv, bot, event, args):
-    if is_logged_in(event.source.userhost):
-        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin or int(users[get_login(event.source.userhost).username]['privileges']) & privileges.master or int(users[get_login(event.source.userhost).username]['privileges']) & privileges.known:
-            if args is not None:
-                for chan in ''.join(args).split(','):
-                    serv.join(chan)
-            else:
-                for chan in bot._channels:
-                    serv.join(chan)
-                return 'No channel specified, joining default channels'
-        else:
-            return 'Not sufficent privileges, need at least known capabilities.'
+@Function('part', requestserv=True, authlvl='admin')
+def part(args, source, target, serv):
+    if target[0] == '#':
+        if args is None:
+            serv.part(target, 'bye')
+        elif len(args) == 1 and args[0][0] == '#':
+            serv.part(args[0], 'bye')
+        elif len(args) == 1 and args[0][0] != '#':
+            serv.part(target, args[0])
+        elif len(args) > 1 and args[0][0] == '#':
+            serv.part(args[0], ' '.join(args[1:]))
+        elif len(args) > 1 and args[0][0] != '#':
+            serv.part(target, ' '.join(args))
     else:
-        return 'You\'re not logged in.'
-
-def part(serv, bot, event, args):
-    if is_logged_in(event.source.userhost):
-        if int(users[get_login(event.source.userhost).username]['privileges']) & privileges.admin or int(users[get_login(event.source.userhost).username]['privileges']):
-            if args is not None:
-                serv.part(''.join(args), 'part command used by {0}'.format(event.source.nick))
-            else:
-                serv.part(event.target, 'part command used by {0}'.format(event.source.nick))
+        if args is None:
+            serv.notice(target, 'invalid syntax')
+            return
+        elif len(args) == 1 and args[0][0] == '#':
+            serv.part(args[0], 'bye')
+        elif len(args) > 1 and args[0][0] == '#':
+            serv.part(args[0], ' '.join(args[1:]))
         else:
-            return 'Not sufficent privileges, need at least admin capabilities.'
+            serv.notice(source.nick, 'invalid syntax')
+            return
+
+@Function('die', requestserv=True, authlvl='master')
+def die(args, source, target, serv):
+    if args is None:
+        serv.quit('bye')
+        quit(0)
     else:
-        return 'You\'re not logged in.'
+        serv.quit(' '.join(args))
+        quit(0)
 
-##############################
-# NO DEFINE BELOW THIS POINT #
-##############################
-
-binding = {'whoami': whoami,
-           'auth': auth,
-           'logout': logout,
-           'die': die,
-           'join': join,
-           'part': part}
+@Function('notice', requestserv=True, authlvl='known')
+def notice(args, source, target, serv):
+    if args is None or len(args) < 2:
+        serv.notice(source.nick, 'args should be (target, text)')
+        return
+    else:
+        serv.notice(args[0], ' '.join(args[1:]))
