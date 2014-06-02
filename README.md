@@ -17,6 +17,7 @@ To add more commands:
 * Create the function in `functions.py` (you can put it in another file but be sure to import it in `main.py`, it must look like this:
 ```python
 from core import ToSend
+from functions_core import Function
 ...
 @Function('myfunc')
 def my_func(args, source, target):
