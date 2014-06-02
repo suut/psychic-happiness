@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from functions_core import Function, register
-from core import ToSend, server_config, format
+from core import ToSend, server_config, format, version
 from random import sample
 import google
 
@@ -126,4 +126,10 @@ def error(args, source, target):
 
 @Function('source')
 def source(args, source, target):
+    """prints the URL of the source code (on github)"""
     return ToSend(target, '{0}source code{1}: https://github.com/suut/psychic-happiness/tree/v2/'.format(format['bold'], format['reset']))
+
+@Function('version')
+def version(args, source, target):
+    """prints the actual bot version"""
+    return ToSend(target, version)

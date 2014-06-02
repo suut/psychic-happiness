@@ -64,3 +64,6 @@ chosen_server = ServerSpec(_serversparser[sys.argv[1]]['host'],
 format = {'bold': '',
            'underlined': '',
            'reset': ''}
+
+with open('VERSION') as file:
+    version = file.read()
