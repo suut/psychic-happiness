@@ -123,3 +123,7 @@ def drugs(args, source, target):
 def error(args, source, target):
     """to test handling of exceptions"""
     raise RuntimeError('FATAL ERROR')
+
+@Function('source')
+def source(args, source, target):
+    return ToSend(target, '{0}source code{1}: https://github.com/suut/psychic-happiness/tree/v2/'.format(format['bold'], format['reset']))
