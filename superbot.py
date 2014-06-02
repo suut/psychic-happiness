@@ -44,7 +44,7 @@ class SuperBot(irc.bot.SingleServerIRCBot):
                 pass
             else:
                 if title is not None:
-                    serv.privmsg(event.target, title)
+                    serv.privmsg(event.target, title.replace('\n', ''))
 
     def on_privmsg(self, serv, event):
         ret = process_privmsg(event.arguments[0], event.source, serv)
