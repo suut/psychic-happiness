@@ -25,7 +25,7 @@ def my_func(args, source, target):
   return ToSend(target, 'this will be printed back to channel')
 ```
 * If the function requires a certain auth level (`known`, `admin` or `master`), specify it in the decorator: `@Function('myfunc', authlvl='known')`.
-* If the function requires special action of the serv (e.g. notice of private message), specify it in the decorator: `@Function('myfunc', requestserv=True`) then modify the function header: `def my_func(args, source, target, serv)`.
+* If the function requires special action of the serv (e.g. notice of private message), specify it in the decorator: `@Function('myfunc', requestserv=True)` then modify the function header: `def my_func(args, source, target, serv)`.
 
 Note: every command can be sent to the bot via channel msg, or via privmsg
 ### Admin commands
