@@ -16,7 +16,7 @@ class LoggedIn:
 loggedin = []
 
 uparser = configparser.ConfigParser()
-uparser.read('users/users.ini')
+uparser.read('config/users.ini')
 
 userlist = uparser.sections()
 print('registered users:', ', '.join(userlist))
