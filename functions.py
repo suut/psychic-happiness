@@ -130,6 +130,6 @@ def source(args, source, target):
     return ToSend(target, '{0}source code{1}: https://github.com/suut/psychic-happiness/tree/v2/'.format(format['bold'], format['reset']))
 
 @Function('version')
-def version(args, source, target):
+def version_(args, source, target):
     """prints the actual bot version"""
     return ToSend(target, version)
