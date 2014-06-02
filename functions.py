@@ -66,6 +66,7 @@ def search(args, source, target):
 
 @Function('yt')
 def youtube(args, source, target):
+    """performs a search on YouTube"""
     if args is not None:
         q = google.YoutubeQuery(' '.join(args))
         try:
@@ -120,4 +121,5 @@ def drugs(args, source, target):
 
 @Function('error')
 def error(args, source, target):
+    """to test handling of exceptions"""
     raise RuntimeError('FATAL ERROR')
