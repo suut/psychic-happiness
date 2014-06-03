@@ -1,17 +1,18 @@
-== command ==
+# Roadmap
 
-[ ] IUPAC molecule drawing
-[ ] shorten URL
-[ ] dictionnary
-[ ] word of the day
-[ ] 420chan style actions
-[ ] drug of the day
-[ ] tell
-[ ] reminder
+##### Commands
 
+* IUPAC molecule drawing
+* shorten URL
+* dictionnary
+* word of the day
+* 420chan style actions
+* drug of the day
+* tell
+* reminder
 
-== core ==
+##### Core
 
-[ ] get rid of ToSend objects
-[ ] dynamic config (saving to disk, rehash)
-[ ] dynamic command loading
+* get rid of ToSend objects
+* dynamic config (saving to disk, rehash)
+* dynamic command loading
