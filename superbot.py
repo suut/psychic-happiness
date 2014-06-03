@@ -1,10 +1,10 @@
 #!/usr/bin/python3.3
 # -*- coding: utf-8 -*-
 
-import irc.bot, parse_links
+import irc_lib.bot, parse_links
 from functions_core import process_cmd, process_privmsg
 
-class SuperBot(irc.bot.SingleServerIRCBot):
+class SuperBot(irc_lib.bot.SingleServerIRCBot):
     def __init__(self, server):
         print('initializing...')
         super().__init__((server,), server.nickname, server.username, server.realname)
