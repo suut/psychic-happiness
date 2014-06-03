@@ -132,7 +132,7 @@ def drugs(args, source, target):
     if target == '#psychonautfr':
         return 'what the hell do you think you\'re doing??'
     else:
-        return 'http://nicolodouma.mooo.com/rc.html http://rcshops.pastebay.net/1279926'
+        return 'http://rcshops.pastebay.net/1279926'
 
 
 @Function('error')
@@ -163,3 +163,8 @@ def dotd(args, source, target):
     return '{0}drug of the day{1}: {2}'.format(format['bold'],
                                                format['reset'],
                                                list_drugs[seed%len(list_drugs)])
+
+@Function('lapin')
+def lapin(args, source, target):
+    """lapin!!"""
+    return 'celui qui a une grande..paire d\'oreilles'
