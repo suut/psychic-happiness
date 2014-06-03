@@ -10,10 +10,10 @@
 #   [ ] loading and providing configuration e.g. is_enabled()
 #   [ ] provides ini reading interface
 
-import irc_lib.bot, configparser
+import irc.bot, configparser
 import sys
 
-class ServerSpec(irc_lib.bot.ServerSpec):
+class ServerSpec(irc.bot.ServerSpec):
     def __init__(self, host, port, password, nickname, username, realname, channels):
         if password == '':
             password = None
