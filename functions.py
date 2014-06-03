@@ -60,7 +60,15 @@ def search(args, source, target):
         except IndexError as e:
             return 'no results'
         else:
-            return r.display()
+            return '{0}{1}{2} — {3}\n{4}\n{5}{6}{7}{8}'.format(format['bold'],
+                                                               r.title,
+                                                               format['reset'],
+                                                               r.display_url,
+                                                               r.abstract,
+                                                               format['bold'],
+                                                               format['underlined'],
+                                                               r.link,
+                                                               format['reset'])
     return 'no query specified'
 
 
@@ -74,7 +82,15 @@ def youtube(args, source, target):
         except IndexError as e:
             return 'no results'
         else:
-            return r.display()
+            return '{0}{1}{2} — {3}\n{4}\n{5}{6}http://youtu.be/{7}{8}'.format(format['bold'],
+                                                                               r.title,
+                                                                               format['reset'],
+                                                                               r.channel,
+                                                                               r.description,
+                                                                               format['bold'],
+                                                                               format['underlined'],
+                                                                               r.id,
+                                                                               format['reset'])
     return 'no query specified'
 
 
@@ -144,4 +160,6 @@ with open('drugs.txt') as file:
 def dotd(args, source, target):
     """drug of the day :)"""
     seed = int('{0}{1}{2}'.format(datetime.datetime.today().day, datetime.datetime.today().month, datetime.datetime.today().year))
-    return list_drugs[seed%len(list_drugs)]
+    return '{0}drug of the day{1}: {2}'.format(format['bold'],
+                                               format['reset'],
+                                               list_drugs[seed%len(list_drugs)])

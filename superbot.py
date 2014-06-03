@@ -3,7 +3,7 @@
 
 import irc.bot, parse_links
 from functions_core import process_cmd, process_privmsg
-from core import split
+from core import split, format
 from auth_core import loggedin
 
 class SuperBot(irc.bot.SingleServerIRCBot):
@@ -49,7 +49,9 @@ class SuperBot(irc.bot.SingleServerIRCBot):
                 pass
             else:
                 if title is not None:
-                    serv.privmsg(event.target, title.replace('\n', ''))
+                    serv.privmsg(event.target, '{0}title of the link{1}: {2}'.format(format['bold'],
+                                                                                     format['reset'],
+                                                                                     title.replace('\n', '')))
 
     def on_privmsg(self, serv, event):
         ret = process_privmsg(event.arguments[0], event.source, serv, self.channels)
