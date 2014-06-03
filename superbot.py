@@ -49,7 +49,7 @@ class SuperBot(irc.bot.SingleServerIRCBot):
                 pass
             else:
                 if title is not None:
-                    serv.privmsg(event.target, '{0}title of the link{1}: {2}'.format(format['bold'],
+                    serv.privmsg(event.target, '{0}title{1}: {2}'.format(format['bold'],
                                                                                      format['reset'],
                                                                                      title.replace('\n', '')))
 
@@ -80,3 +80,4 @@ class SuperBot(irc.bot.SingleServerIRCBot):
             if i.host == event.source.userhost:
                 #he was a logged in user
                 loggedin.remove(i)
+

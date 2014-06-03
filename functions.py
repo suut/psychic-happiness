@@ -168,3 +168,8 @@ def dotd(args, source, target):
 def lapin(args, source, target):
     """lapin!!"""
     return 'celui qui a une grande..paire d\'oreilles'
+
+@Function('rainbow')
+def rainbow(args, source, target):
+    """a 'rainbow'"""
+    return '04,04...07,07...08,08...03,03...02,02...13,13...06,06...\n04,04...07,07...08,08...03,03...02,02...13,13...06,06...\n04,04...07,07...08,08...03,03...02,02...13,13...06,06...'
