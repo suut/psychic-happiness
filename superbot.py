@@ -4,6 +4,7 @@
 import irc.bot, parse_links
 from functions_core import process_cmd, process_privmsg
 from core import split
+from auth_core import loggedin
 
 class SuperBot(irc.bot.SingleServerIRCBot):
     def __init__(self, server):
@@ -55,3 +56,25 @@ class SuperBot(irc.bot.SingleServerIRCBot):
         if ret is not None:
             for i in split(ret, event.source.nick):
                 serv.privmsg(event.source.nick, i)
+
+    def on_part(self, serv, event):
+        #an user just parted
+        #let's verify if (s)he's authed
+        for i in loggedin:
+            if i.host == event.source.userhost:
+                #he was a logged in user
+                #let's now check if he's on other common channels
+                for name, chan in zip(self.channels.keys(), self.channels.values()):
+                    if event.source.nick in chan.userdict.keys():
+                        #phew! he's on another common channel
+                        return
+                #he's not on other channels, let's remove it
+                loggedin.remove(i)
+
+    def on_quit(self, serv, event):
+        #an user just quitted
+        #let's verify if (s)he's authed
+        for i in loggedin:
+            if i.host == event.source.userhost:
+                #he was a logged in user
+                loggedin.remove(i)
