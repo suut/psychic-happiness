@@ -14,7 +14,8 @@
 
 ##### Core
 
-* get rid of ToSend objects
-* be able to get userlist
+* ~~get rid of ToSend objects~~
+* ~~split messages in 512 bytes chunks~~
+* ~~be able to get userlist~~
 * dynamic config (saving to disk, rehash)
 * dynamic command loading

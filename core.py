@@ -3,7 +3,6 @@
 
 # core.py
 # Functions:
-#   [X] ToSend object
 #   [X] loading servers details
 #   [X] loading servers config (in which is found username, etc.)
 #   [ ] logging to disk commands and status
@@ -14,7 +13,7 @@ import irc.bot, configparser
 import sys
 
 class ServerSpec(irc.bot.ServerSpec):
-    def __init__(self, host, port, password, nickname, username, realname, channels):
+    def __init__(self, host, port, password, nickname, username, realname, channels, modes):
         if password == '':
             password = None
         super().__init__(host, port, password)
@@ -22,16 +21,10 @@ class ServerSpec(irc.bot.ServerSpec):
         self.realname = realname
         self.username = username
         self.channels = channels
-
-class ToSend:
-    """ a class to ease the slicing of messages to send """
-    def __init__(self, target, content):
-        #TODO: split the msg in 512o chunks
-        self.target = target
-        self.content = content.split('\n')
+        self.modes = modes
 
 # LOADING SERVERS CONFIG
-#sys.argv.append('quakenet')
+#sys.argv[1] = 'quakenet'
 #TODO: ^spoofing the cmdline for testing purposes, TO REMOVE
 print('booting up...')
 _serversparser = configparser.ConfigParser()
@@ -59,7 +52,8 @@ chosen_server = ServerSpec(_serversparser[sys.argv[1]]['host'],
                _details['nickname'],
                _details['username'],
                _details['realname'],
-               _details['channels'].split(','))
+               _details['channels'].split(','),
+               _details['modes'])
 
 format = {'bold': '',
            'underlined': '',
@@ -67,3 +61,26 @@ format = {'bold': '',
 
 with open('VERSION') as file:
     version = file.read()
+
+def split(txt, target):
+    # split according to \n in text
+    # split in 512 bytes (and be careful not to split in the middle of a UTF-8 control code)
+    final_text = []
+    for i in txt.split('\n'):
+        if len(i.encode())+len(target.encode()) >= 500:
+            # "PRIVMSG #channel :message\r\n" must not exceed 512 bytes
+            s = i.encode()
+            splitted = []
+            cursor = 500-len(target)
+            while ''.join(j.decode() for j in splitted) != i:
+                try:
+                    s[:cursor].decode()
+                except UnicodeDecodeError:
+                    cursor -= 1
+                splitted.append(s[:cursor])
+                s = s[cursor:]
+                cursor -= len(s)
+            final_text += [k.decode() for k in splitted]
+        else:
+            final_text.append(i)
+    return final_text

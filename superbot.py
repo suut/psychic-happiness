@@ -3,6 +3,7 @@
 
 import irc.bot, parse_links
 from functions_core import process_cmd, process_privmsg
+from core import split
 
 class SuperBot(irc.bot.SingleServerIRCBot):
     def __init__(self, server):
@@ -10,6 +11,7 @@ class SuperBot(irc.bot.SingleServerIRCBot):
         super().__init__((server,), server.nickname, server.username, server.realname)
         self.connection.buffer_class.errors = 'replace' # prevents crashing due to unicode errors
         self._channels = server.channels
+        self.modes = server.modes
         print('bot initialized.')
 
     def start(self):
@@ -18,6 +20,8 @@ class SuperBot(irc.bot.SingleServerIRCBot):
 
     def on_welcome(self, serv, event):
         print('\tgot welcome message.')
+        if self.modes != '':
+            serv.mode(serv.get_nickname(), self.modes)
         if self._channels is not None:
             print('\tjoining following channels:', ', '.join(self._channels), '...')
             for chan in self._channels:
@@ -32,10 +36,10 @@ class SuperBot(irc.bot.SingleServerIRCBot):
             serv.privmsg(event.target, 'je t\'en foutrais moi du "{0}" pd de {1}'.format(event.arguments[1].strip(), event.source.nick))
 
     def on_pubmsg(self, serv, event):
-        ret = process_cmd(event.arguments[0], event.source, event.target, serv)
+        ret = process_cmd(event.arguments[0], event.source, event.target, serv, self.channels)
         if ret is not None:
-            for i in ret.content:
-                serv.privmsg(ret.target, i)
+            for i in split(ret, event.target):
+                serv.privmsg(event.target, i)
         else:
             #it is not a command, let's verify if it contains links
             try:
@@ -47,7 +51,7 @@ class SuperBot(irc.bot.SingleServerIRCBot):
                     serv.privmsg(event.target, title.replace('\n', ''))
 
     def on_privmsg(self, serv, event):
-        ret = process_privmsg(event.arguments[0], event.source, serv)
+        ret = process_privmsg(event.arguments[0], event.source, serv, self.channels)
         if ret is not None:
-            for i in ret.content:
-                serv.privmsg(ret.target, i)
+            for i in split(ret, event.source.nick):
+                serv.privmsg(event.source.nick, i)

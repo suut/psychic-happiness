@@ -7,7 +7,6 @@
 #   * known
 
 from functions_core import Function
-from core import ToSend
 import hashlib
 from auth_core import uparser, loggedin, LoggedIn, getinfos, require
 
@@ -36,17 +35,17 @@ def auth(args, source, target, serv):
 def whoami(args, source, target):
     ret = getinfos(source.userhost)
     if ret is None and source.nick.lower() == 'sarah':
-        return ToSend(target, 'you\'re the most beautiful one')
+        return 'you\'re the most beautiful one'
     #TODO: to remove one day
     if ret is None:
-        return ToSend(target, 'you\'re nobody')
-    return ToSend(target, 'you\'re {0} ({1})'.format(ret['uname'], ret['level']))
+        return 'you\'re nobody'
+    return 'you\'re {0} ({1})'.format(ret['uname'], ret['level'])
 
 @Function('say', requestserv=True, authlvl='known')
 def say(args, source, target, serv):
     r = require(source, 'known')
     if r is not None:
-        return ToSend(target, r)
+        return r
     # args should be (chan, text)
     if args is None or len(args) < 2:
         serv.notice(source.nick, 'args should be (chan, text)')
