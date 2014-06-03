@@ -4,6 +4,7 @@
 from functions_core import Function, register
 from core import ToSend, server_config, format, version
 from random import sample
+import datetime
 import google
 
 @Function('ping')
@@ -133,3 +134,12 @@ def source(args, source, target):
 def version_(args, source, target):
     """prints the actual bot version"""
     return ToSend(target, version)
+
+with open('drugs.txt') as file:
+    list_drugs = file.read().split('\n')
+
+@Function('dotd')
+def dotd(args, source, target):
+    """drug of the day :)"""
+    seed = int('{0}{1}{2}'.format(datetime.datetime.today().day, datetime.datetime.today().month, datetime.datetime.today().year))
+    return ToSend(target, list_drugs[seed%len(list_drugs)])
