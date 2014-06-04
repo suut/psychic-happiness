@@ -85,7 +85,8 @@ usedlast = {}
 def okthrottle(userhost):
     if userhost in usedlast.keys():
         if round(time())-usedlast[userhost]['timestamp'] < int(core.details['throttle']):
-            if not usedlast[userhost]['timestamp']:
+            if not usedlast[userhost]['notify']:
+                usedlast[userhost['notify']] = True
                 return 'notify'
             else:
                 return False
