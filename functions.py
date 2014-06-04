@@ -51,7 +51,7 @@ def eyecancer(args, source, target):
     return '13,10UNTZ2,3UNTZ2,7UNTZ2,7UNTZ6,13UNTZ12,5UNTZ4,10UNTZ11,6UNTZ9,13UNTZ4,13UNTZ3,11UNTZ3,7UNTZ7,9UNTZ6,10UNTZ9,2UNTZ10,9UNTZ10,7UNTZ4,11UNTZ3,13UNTZ12,11UNTZ9,6UNTZ2,11UNTZ13,7UNTZ3,9UNTZ13,10UNTZ2,10UNTZ8,2UNTZ10,5UNTZ9,10UNTZ9,4UNTZ6,4UNTZ6,9UNTZ7,8UNTZ8,13UNTZ5,11UNTZ10,5UNTZ8,10UNTZ5,10UNTZ2,7UNTZ12,8UNTZ2,8UNTZ9,12UNTZ4,10UNTZ6,3UNTZ2,6UNTZ11,6UNTZ5,13UNTZ8,3UNTZ11,4UNTZ2,11UNTZ6,7UNTZ'
 
 
-@Function('g')
+@Function(['g', 'google'])
 def search(args, source, target):
     """performs a search via Google"""
     if args is not None:
@@ -192,7 +192,7 @@ def scsearch(args, source, target):
                                                            r['title'],
                                                            format['reset'],
                                                            r['username'],
-                                                           r['description'].replace('\n', '').replace('\xA0', ''),
+                                                           r['description'].replace('\n', '').replace('\r', ''),
                                                            format['underlined'],
                                                            format['bold'],
                                                            r['url'],
