@@ -84,12 +84,15 @@ usedlast = {}
 
 def okthrottle(userhost):
     if userhost in usedlast.keys():
-        if round(time())-usedlast[userhost] < int(core.details['throttle']):
-            return False
+        if round(time())-usedlast[userhost]['timestamp'] < int(core.details['throttle']):
+            if not usedlast[userhost]['timestamp']:
+                return 'notify'
+            else:
+                return False
     return True
 
 def updatethrottle(userhost):
-    usedlast[userhost] = round(time())
+    usedlast[userhost] = {'timestamp': round(time()), 'notified': False}
 
 def process_cmd(msg, source, target, serv, channels):
     # [ ] check if the user is muted
@@ -112,7 +115,8 @@ def process_cmd(msg, source, target, serv, channels):
                         serv.notice(source.nick, r)
                         return
                 #it's a normal command, let's check if the throttle has ended
-                if okthrottle(source.userhost):
+                r = okthrottle(source.userhost)
+                if r:
                     updatethrottle(source.userhost)
                     if f.requestserv:
                         return f(args, source, target, serv)
@@ -122,6 +126,11 @@ def process_cmd(msg, source, target, serv, channels):
                         return f(args, source, target, serv, channels)
                     else:
                         return f(args, source, target)
+                elif r == 'notify':
+                    serv.notice(source.nick, 'please wait at least {0} secondes between commands'.format(core.details['throttle']))
+                    return
+                elif not r:
+                    return
 
 
 def process_privmsg(msg, source, serv, channels):
