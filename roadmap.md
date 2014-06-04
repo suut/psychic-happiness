@@ -3,6 +3,7 @@
 ##### Commands
 
 * ~~drug of the day~~
+* ~~soundcloud search~~
 * IUPAC molecule drawing
 * shorten URL
 * dictionnary
@@ -11,7 +12,6 @@
 * tell
 * reminder
 * mute command
-* soundcloud search
 
 ##### Core
 
@@ -19,6 +19,6 @@
 * ~~split messages in 512 bytes chunks~~
 * ~~be able to get userlist~~
 * ~~intelligent flood control~~
-* better looking youtube link display
+* better looking youtube and soundcloud link display
 * dynamic config (saving to disk, rehash)
 * dynamic command loading

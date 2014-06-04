@@ -97,6 +97,18 @@ def okthrottle(userhost):
 def updatethrottle(userhost):
     usedlast[userhost] = {'timestamp': round(time()), 'notified': False}
 
+def match(f, cmd):
+    if isinstance(f.cmdname, list):
+        if cmd in f.cmdname:
+            return True
+        else:
+            return False
+    else:
+        if f.cmdname == cmd:
+            return True
+        else:
+            return False
+
 def process_cmd(msg, source, target, serv, channels):
     # [ ] check if the user is muted
     # [X] retrieve function registry
@@ -109,7 +121,7 @@ def process_cmd(msg, source, target, serv, channels):
         if len(msg) > 1:
             args = msg[1:]
         for f in register:
-            if f.cmdname == cmd:
+            if match(f, cmd):
                 print('`{0}` from {1}'.format(cmd, source))
                 if f.authlvl != 'none':
                     print('\tthis function requires {0} authlvl'.format(f.authlvl))
@@ -146,7 +158,7 @@ def process_privmsg(msg, source, serv, channels):
     if len(msg) > 1:
         args = msg[1:]
     for f in register:
-        if f.cmdname == cmd:
+        if match(f, cmd):
             print('`{0}` from {1}'.format(cmd, source))
             if f.authlvl != 'none':
                 print('this function requires {0} authlvl'.format(f.authlvl))

@@ -1,11 +1,12 @@
 #!/usr/bin/python3.2
 # -*- coding: utf-8 -*-
 
-from functions_core import Function, register
+from functions_core import Function, register, match
 from core import server_config, format, version
 from random import sample
 import datetime
 import google
+import soundcloud
 
 @Function('ping')
 def ping(args, source, target):
@@ -72,7 +73,7 @@ def search(args, source, target):
     return 'no query specified'
 
 
-@Function('yt')
+@Function(['yt', 'youtube'])
 def youtube(args, source, target):
     """performs a search on YouTube"""
     if args is not None:
@@ -107,12 +108,18 @@ def film(args, source, target):
 def help(args, source, target):
     """provides help on commands"""
     if args is None: #showing all functions
-        return 'commands are: {0}\nto know more about a particular command type {1}help cmdname'.format(', '.join(i.cmdname for i in register), server_config['commands']['cmdprefix'])
+        list_of_cmds = []
+        for f in register:
+            if isinstance(f.cmdname, list):
+                list_of_cmds.append(' = '.join(f.cmdname))
+            else:
+                list_of_cmds.append(f.cmdname)
+        return 'commands are: {0}\nto know more about a particular command type {1}help cmdname'.format(', '.join(list_of_cmds), server_config['commands']['cmdprefix'])
     elif len(args) != 1:
         return 'syntax is cmdname'
     else:
         for i in register:
-            if i.cmdname == args[0].lower():
+            if match(i, args[0].lower()):
                 if i.doc is None:
                     return 'command has no documentation yet'
                 else:
@@ -173,3 +180,22 @@ def lapin(args, source, target):
 def rainbow(args, source, target):
     """a 'rainbow'"""
     return '04,04...07,07...08,08...03,03...02,02...13,13...06,06...\n04,04...07,07...08,08...03,03...02,02...13,13...06,06...\n04,04...07,07...08,08...03,03...02,02...13,13...06,06...'
+
+@Function(['sc', 'soundcloud'])
+def scsearch(args, source, target):
+    """performs a search on soundcloud"""
+    if args is not None:
+        r = soundcloud.soundcloud_search(' '.join(args))
+        if r is None:
+            return 'no results'
+        return '{0}{1}{2} — {3}\n{4}\n{5}{6}{7}{8}'.format(format['bold'],
+                                                           r['title'],
+                                                           format['reset'],
+                                                           r['username'],
+                                                           r['description'].replace('\n', '').replace('\xA0', ''),
+                                                           format['underlined'],
+                                                           format['bold'],
+                                                           r['url'],
+                                                           format['reset'])
+    else:
+        return 'no query specified'
