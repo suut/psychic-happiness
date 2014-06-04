@@ -8,7 +8,7 @@
 
 import core
 from time import time
-from auth_core import require
+from auth_core import require, getinfos
 
 
 class IRCException(Exception):
@@ -85,16 +85,15 @@ usedlast = {}
 def okthrottle(userhost):
     if userhost in usedlast.keys():
         print(round(time())-usedlast[userhost]['timestamp'])
-        print('userhost found')
         if round(time())-usedlast[userhost]['timestamp'] < int(core.details['throttle']):
-            print('thottle exceeded')
+            if getinfos(userhost) is not None:
+                return 'ok'
             if not usedlast[userhost]['notified']:
-                print('notifying the user')
                 usedlast[userhost]['notified'] = True
                 return 'notify'
             else:
-                return False
-    return True
+                return 'donothing'
+    return 'ok'
 
 def updatethrottle(userhost):
     usedlast[userhost] = {'timestamp': round(time()), 'notified': False}
@@ -121,7 +120,7 @@ def process_cmd(msg, source, target, serv, channels):
                         return
                 #it's a normal command, let's check if the throttle has ended
                 r = okthrottle(source.userhost)
-                if r:
+                if r == 'ok':
                     updatethrottle(source.userhost)
                     if f.requestserv:
                         return f(args, source, target, serv)
@@ -134,7 +133,7 @@ def process_cmd(msg, source, target, serv, channels):
                 elif r == 'notify':
                     serv.notice(source.nick, 'please wait at least {0} secondes between commands'.format(core.details['throttle']))
                     return
-                elif not r:
+                elif r == 'donothing':
                     return
 
 
