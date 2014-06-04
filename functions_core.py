@@ -7,6 +7,7 @@
 #       [X] function object
 
 import core
+from time import time
 from auth_core import require
 
 
@@ -79,6 +80,17 @@ def Function(cmdname, authlvl='none', requestserv=False, requestchans=False):
     return decorator
 
 
+usedlast = {}
+
+def okthrottle(userhost):
+    if userhost in usedlast.keys():
+        if round(time())-usedlast[userhost] < int(core.details['throttle']):
+            return False
+    return True
+
+def updatethrottle(userhost):
+    usedlast[userhost] = round(time())
+
 def process_cmd(msg, source, target, serv, channels):
     # [ ] check if the user is muted
     # [X] retrieve function registry
@@ -99,14 +111,17 @@ def process_cmd(msg, source, target, serv, channels):
                     if r is not None:
                         serv.notice(source.nick, r)
                         return
-                if f.requestserv:
-                    return f(args, source, target, serv)
-                elif f.requestchans:
-                    return f(args, source, target, channels)
-                elif f.requestchans and f.requestserv:
-                    return f(args, source, target, serv, channels)
-                else:
-                    return f(args, source, target)
+                #it's a normal command, let's check if the throttle has ended
+                if okthrottle(source.userhost):
+                    updatethrottle(source.userhost)
+                    if f.requestserv:
+                        return f(args, source, target, serv)
+                    elif f.requestchans:
+                        return f(args, source, target, channels)
+                    elif f.requestchans and f.requestserv:
+                        return f(args, source, target, serv, channels)
+                    else:
+                        return f(args, source, target)
 
 
 def process_privmsg(msg, source, serv, channels):

@@ -39,7 +39,7 @@ print('will connect to {0} ({1}:{2})'.format(sys.argv[1],
 #loading server details
 server_config = configparser.ConfigParser()
 server_config.read('config/{0}.ini'.format(sys.argv[1]))
-_details = server_config['details']
+details = server_config['details']
 
 def write_config():
     with open('config/{0}.ini'.format(sys.argv[1]), mode='w') as f:
@@ -49,11 +49,11 @@ def write_config():
 chosen_server = ServerSpec(_serversparser[sys.argv[1]]['host'],
                int(_serversparser[sys.argv[1]]['port']),
                _serversparser[sys.argv[1]]['password'],
-               _details['nickname'],
-               _details['username'],
-               _details['realname'],
-               _details['channels'].split(','),
-               _details['modes'])
+               details['nickname'],
+               details['username'],
+               details['realname'],
+               details['channels'].split(','),
+               details['modes'])
 
 format = {'bold': '',
            'underlined': '',
