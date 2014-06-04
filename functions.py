@@ -192,7 +192,7 @@ def scsearch(args, source, target):
                                                            r['title'],
                                                            format['reset'],
                                                            r['username'],
-                                                           r['description'].replace('\n', '').replace('\r', ''),
+                                                           r['description'].replace('\n', '').replace('\r', '')[:450],
                                                            format['underlined'],
                                                            format['bold'],
                                                            r['url'],
