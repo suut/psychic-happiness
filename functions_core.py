@@ -84,8 +84,11 @@ usedlast = {}
 
 def okthrottle(userhost):
     if userhost in usedlast.keys():
+        print('userhost found')
         if round(time())-usedlast[userhost]['timestamp'] < int(core.details['throttle']):
+            print('thottle exceeded')
             if not usedlast[userhost]['notified']:
+                print('notifying the user')
                 usedlast[userhost]['notified'] = True
                 return 'notify'
             else:
