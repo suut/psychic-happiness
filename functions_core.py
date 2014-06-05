@@ -133,12 +133,12 @@ def process_cmd(msg, source, target, serv, channels):
                 r = okthrottle(source.userhost)
                 if r == 'ok':
                     updatethrottle(source.userhost)
-                    if f.requestserv:
+                    if f.requestchans and f.requestserv:
+                        return f(args, source, target, serv, channels)
+                    elif f.requestserv:
                         return f(args, source, target, serv)
                     elif f.requestchans:
                         return f(args, source, target, channels)
-                    elif f.requestchans and f.requestserv:
-                        return f(args, source, target, serv, channels)
                     else:
                         return f(args, source, target)
                 elif r == 'notify':
@@ -166,11 +166,11 @@ def process_privmsg(msg, source, serv, channels):
                 if r is not None:
                     serv.notice(source.nick, r)
                     return
-            if f.requestserv:
+            if f.requestserv and f.requestchans:
+                return f(args, source, source.nick, serv, channels)
+            elif f.requestserv:
                 return f(args, source, source.nick, serv)
             elif f.requestchans:
                 return f(args, source, source.nick, channels)
-            elif f.requestserv and f.requestchans:
-                return f(args, source, source.nick, serv, channels)
             else:
                 return f(args, source, source.nick)

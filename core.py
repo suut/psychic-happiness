@@ -41,6 +41,7 @@ server_config = configparser.ConfigParser()
 server_config.read('config/{0}.ini'.format(sys.argv[1]))
 details = server_config['details']
 
+
 def write_config():
     with open('config/{0}.ini'.format(sys.argv[1]), mode='w') as f:
         server_config.write(f)
@@ -61,6 +62,7 @@ format = {'bold': '',
 
 with open('VERSION') as file:
     version = file.read()
+
 
 def split(txt, target):
     # split according to \n in text

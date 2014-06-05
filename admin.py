@@ -9,6 +9,7 @@
 from functions_core import Function
 import hashlib
 from auth_core import uparser, loggedin, LoggedIn, getinfos, require
+from core import server_config, write_config, format, read_config
 
 
 @Function('auth', requestserv=True)
@@ -115,3 +116,27 @@ def notice(args, source, target, serv):
         return
     else:
         serv.notice(args[0], ' '.join(args[1:]))
+
+@Function('throttle', authlvl='admin')
+def throttle(args, source, target):
+    if args is not None:
+        if ''.join(args).isdigit():
+            server_config['details']['throttle'] = ''.join(args)
+            return 'throttle set to {0}'.format(''.join(args))
+        else:
+            return 'usage: THROTTLE time'
+    else:
+        return 'throttle actually set to {0}'.format(server_config['details']['throttle'])
+
+
+@Function('saveconfig', requestchans=True, requestserv=True, authlvl='master')
+def saveconfig(args, source, target, serv, channels):
+    chans = ','.join(channels.keys())
+    server_config['details']['channels'] = chans
+    server_config['details']['nickname'] = serv.get_nickname()
+    write_config()
+    return 'config writed successfully. {0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
+                                                                                                              format['reset'],
+                                                                                                              chans,
+                                                                                                              serv.get_nickname(),
+                                                                                                              serv['details']['throttle'])
