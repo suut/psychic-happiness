@@ -28,7 +28,7 @@ class ServerSpec(irc.bot.ServerSpec):
 #TODO: ^spoofing the cmdline for testing purposes, TO REMOVE
 print('booting up...')
 _serversparser = configparser.ConfigParser()
-_serversparser.read('servers.ini')
+_serversparser.read('config/servers.ini')
 print('available servers:', ', '.join(_serversparser.sections()))
 assert len(sys.argv) > 1, 'you must provide a server to connect to'
 assert sys.argv[1] in _serversparser.sections(), '{0} server does not exist'.format(sys.argv[1])

@@ -13,10 +13,10 @@ def ping(args, source, target):
     """pong!"""
     return 'pong'
 
-with open('eloges.txt') as file:
+with open('strings/eloges.txt') as file:
     sarah_adjs = file.read().split('\n')
 
-with open('adjs.txt') as file:
+with open('strings/adjs.txt') as file:
     adjs = file.read().split('\n')
 
 hatsu_adjs = ('execrable',
@@ -95,7 +95,7 @@ def youtube(args, source, target):
     return 'no query specified'
 
 
-with open('pornos.txt') as file:
+with open('strings/pornos.txt') as file:
     pornos = file.read().split('\n')
 
 @Function('film')
@@ -160,7 +160,7 @@ def version_(args, source, target):
     return version
 
 
-with open('drugs.txt') as file:
+with open('strings/drugs.txt') as file:
     list_drugs = file.read().split('\n')
 
 @Function('dotd')
