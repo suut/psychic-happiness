@@ -9,7 +9,7 @@
 from functions_core import Function
 import hashlib
 from auth_core import uparser, loggedin, LoggedIn, getinfos, require
-from core import server_config, write_config, format, read_config
+from core import server_config, write_config, format
 
 
 @Function('auth', requestserv=True)
