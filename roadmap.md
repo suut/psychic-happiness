@@ -4,11 +4,12 @@
 
 * ~~drug of the day~~
 * ~~soundcloud search~~
+* ~~420chan style actions~~
+* weather
 * IUPAC molecule drawing
 * shorten URL
 * dictionnary
 * word of the day
-* 420chan style actions
 * tell
 * reminder
 * mute command
