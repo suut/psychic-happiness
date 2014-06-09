@@ -1,12 +1,13 @@
 #!/usr/bin/python3.2
 # -*- coding: utf-8 -*-
 
-from functions_core import Function, register, match
+from functions_core import Function, register, match, Function
 from core import server_config, format, version
 from random import sample
 import datetime
 import google
 import soundcloud
+import configparser
 
 @Function('ping')
 def ping(args, source, target):
@@ -113,7 +114,8 @@ def help(args, source, target):
             if isinstance(f.cmdname, list):
                 list_of_cmds.append(' = '.join(f.cmdname))
             else:
-                list_of_cmds.append(f.cmdname)
+                if 'is_action' not in dir(f):
+                    list_of_cmds.append(f.cmdname)
         return 'commands are: {0}\nto know more about a particular command type {1}help cmdname'.format(', '.join(list_of_cmds), server_config['commands']['cmdprefix'])
     elif len(args) != 1:
         return 'syntax is cmdname'
@@ -166,20 +168,23 @@ with open('strings/drugs.txt') as file:
 @Function('dotd')
 def dotd(args, source, target):
     """drug of the day :)"""
-    seed = int('{0}{1}{2}'.format(datetime.datetime.today().day, datetime.datetime.today().month, datetime.datetime.today().year))
+    seed = int('{0}{1}'.format(datetime.datetime.today().month, datetime.datetime.today().day))
     return '{0}drug of the day{1}: {2}'.format(format['bold'],
                                                format['reset'],
                                                list_drugs[seed%len(list_drugs)])
+
 
 @Function('lapin')
 def lapin(args, source, target):
     """lapin!!"""
     return 'celui qui a une grande..paire d\'oreilles'
 
+
 @Function('rainbow')
 def rainbow(args, source, target):
     """a 'rainbow'"""
     return '04,04...07,07...08,08...03,03...02,02...13,13...06,06...\n04,04...07,07...08,08...03,03...02,02...13,13...06,06...\n04,04...07,07...08,08...03,03...02,02...13,13...06,06...'
+
 
 @Function(['sc', 'soundcloud'])
 def scsearch(args, source, target):
@@ -192,10 +197,55 @@ def scsearch(args, source, target):
                                                            r['title'],
                                                            format['reset'],
                                                            r['username'],
-                                                           r['description'].replace('\n', '').replace('\r', '')[:450],
+                                                           r['description'].replace('\n', '').replace('\r', '')[:400],
                                                            format['underlined'],
                                                            format['bold'],
                                                            r['url'],
                                                            format['reset'])
     else:
         return 'no query specified'
+
+
+class Action:
+    def __init__(self, name, one, many):
+        self.name = name
+        self._one = one
+        self._many = many
+        self.ppl = []
+
+    def one_f(self, name):
+        return self._one.format(name=name)
+
+    def many_f(self, names):
+        return self._many.format(name=type(self).sep(names))
+
+    def f(self, args, source, target):
+        return self.one_f(source.nick)
+
+    @staticmethod
+    def sep(names):
+        seps = []
+        n = ''
+        for i in range(len(names)-2):
+            seps.append(', ')
+        seps.append(' and ')
+        for i, j in zip(names, seps):
+            n += i+j
+        n += names[-1]
+        return n
+
+actionslist = []
+
+actionsparser = configparser.ConfigParser()
+actionsparser.read('strings/actions.ini')
+actions = dict(actionsparser['actions'])
+
+for key, val in zip(actions.keys(), actions.values()):
+    name = key
+    one, many = val.split(';')
+    actionslist.append(Action(name, one, many))
+
+for act in actionslist:
+    f = Function(act.name)(act.f)
+    f.is_action = True
+    register.append(f)
