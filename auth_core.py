@@ -8,6 +8,7 @@
 
 import configparser
 
+
 class LoggedIn:
     def __init__(self, uname, host):
         self.uname = uname
@@ -15,19 +16,23 @@ class LoggedIn:
 
 loggedin = []
 
+
 uparser = configparser.ConfigParser()
 uparser.read('config/users.ini')
 
 userlist = uparser.sections()
 print('registered users:', ', '.join(userlist))
 
+
 def getinfos(host):
     # returns either None (not logged in), either the lvl
     for i in loggedin:
         if i.host == host:
-            return {'uname':i.uname, 'level': uparser[i.uname]['level']}
+            return {'uname': i.uname, 'level': uparser[i.uname]['level']}
+
 
 def require(source, level):
+    #used to protect a command from being used by everyone
     infos = getinfos(source.userhost)
     if level == 'known':
         levels = ('master', 'admin', 'known')
