@@ -21,14 +21,14 @@ def auth(args, source, target, serv):
     if args[0] not in uparser.sections():
         serv.notice(source.nick, 'unknown user')
         return
-    if hashlib.sha1(args[1].encode()).hexdigest() != uparser[args[0]]['password']:
+    if hashlib.sha1(' '.join(args).strip().encode()).hexdigest() != uparser[args[0]]['password']:
         serv.notice(source.nick, 'invalid password')
         return
     for user in loggedin:
         if user.host == source.userhost:
             serv.notice(source.nick, 'you\'re already logged in')
             return
-    loggedin.append(LoggedIn(' '.join(args).strip(), source.userhost))
+    loggedin.append(LoggedIn(args[0], source.userhost))
     serv.notice(source.nick, 'you\'re now logged in')
 
 
