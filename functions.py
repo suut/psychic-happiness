@@ -123,7 +123,7 @@ def help(args, source, target):
         for i in register:
             if match(i, args[0].lower()):
                 if i.doc is None:
-                    return 'command has no documentation yet'
+                    return 'command has no documentation'
                 else:
                     return '{0}{1}{2}: {3}'.format(format['bold'], args[0].lower(), format['reset'], i.doc)
         return 'unknown command "{0}"'.format(args[0].lower())
@@ -217,10 +217,25 @@ class Action:
         return self._one.format(name=name)
 
     def many_f(self, names):
-        return self._many.format(name=type(self).sep(names))
+        return self._many.format(names=type(self).sep(names))
 
     def f(self, args, source, target):
-        return self.one_f(source.nick)
+        """it's an action"""
+        if args is not None and ''.join(args).strip() == '-clear':
+            self.ppl = []
+            return 'nobody {0} anymore? :('.format(self.name)
+        if len(self.ppl) == 0:
+            self.ppl.append(source.nick)
+            return self.one_f(source.nick)
+        else:
+            if source.nick not in self.ppl:
+                self.ppl.append(source.nick)
+            if len(self.ppl) == 1:
+                #just display the list
+                return self.one_f(self.ppl[0])
+            else:
+                return self.many_f(self.ppl)
+        #return self.one_f(source.nick)
 
     @staticmethod
     def sep(names):
