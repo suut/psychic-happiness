@@ -21,7 +21,7 @@ def auth(args, source, target, serv):
     if args[0] not in uparser.sections():
         serv.notice(source.nick, 'unknown user')
         return
-    if hashlib.sha1(' '.join(args).strip().encode()).hexdigest() != uparser[args[0]]['password']:
+    if hashlib.sha1(' '.join(args[1:]).strip().encode()).hexdigest() != uparser[args[0]]['password']:
         serv.notice(source.nick, 'invalid password')
         return
     for user in loggedin:
