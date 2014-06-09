@@ -15,7 +15,7 @@ from core import server_config, write_config, format
 @Function('auth', requestserv=True)
 def auth(args, source, target, serv):
     # args should be (username, password)
-    if args is None or len(args) != 2:
+    if args is None or len(args) < 2:
         serv.notice(source.nick, 'usage: AUTH username password')
         return
     if args[0] not in uparser.sections():
@@ -28,7 +28,7 @@ def auth(args, source, target, serv):
         if user.host == source.userhost:
             serv.notice(source.nick, 'you\'re already logged in')
             return
-    loggedin.append(LoggedIn(args[0], source.userhost))
+    loggedin.append(LoggedIn(' '.join(args).strip(), source.userhost))
     serv.notice(source.nick, 'you\'re now logged in')
 
 

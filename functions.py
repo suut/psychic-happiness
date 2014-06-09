@@ -235,7 +235,6 @@ class Action:
                 return self.one_f(self.ppl[0])
             else:
                 return self.many_f(self.ppl)
-        #return self.one_f(source.nick)
 
     @staticmethod
     def sep(names):
