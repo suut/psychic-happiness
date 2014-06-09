@@ -33,7 +33,7 @@ def getinfos(host):
 
 def require(source, level):
     #used to protect a command from being used by everyone
-    infos = getinfos(source.userhost)
+    infos = getinfos(source)
     if level == 'known':
         levels = ('master', 'admin', 'known')
     elif level == 'admin':

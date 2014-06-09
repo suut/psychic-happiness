@@ -25,16 +25,16 @@ def auth(args, source, target, serv):
         serv.notice(source.nick, 'invalid password')
         return
     for user in loggedin:
-        if user.host == source.userhost:
+        if user.host == source:
             serv.notice(source.nick, 'you\'re already logged in')
             return
-    loggedin.append(LoggedIn(args[0], source.userhost))
+    loggedin.append(LoggedIn(args[0], source))
     serv.notice(source.nick, 'you\'re now logged in')
 
 
 @Function('whoami')
 def whoami(args, source, target):
-    ret = getinfos(source.userhost)
+    ret = getinfos(source)
     if ret is None and source.nick.lower() == 'sarah':
         return 'you\'re the most beautiful one'
     #TODO: to remove one day
@@ -44,9 +44,6 @@ def whoami(args, source, target):
 
 @Function('say', requestserv=True, authlvl='known')
 def say(args, source, target, serv):
-    r = require(source, 'known')
-    if r is not None:
-        return r
     # args should be (chan, text)
     if args is None or len(args) < 2:
         serv.notice(source.nick, 'args should be (chan, text)')
