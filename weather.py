@@ -11,7 +11,6 @@ import urllib.parse, requests, json
 
 weather_api = {'id': '',
                'secret': ''}
-#register on http://www.hamweather.com/ for an API key
 
 base_url = 'http://api.aerisapi.com/forecasts/'
 
@@ -58,7 +57,7 @@ class WeatherResponse:
 
     @property
     def feelsliketemp(self):
-        return str(self.weatherdata['feelslikeC'])+' °C'
+        return str(self.weatherdata['feelslikeC'])+'°C'
 
     @property
     def precipmm(self):
@@ -71,6 +70,14 @@ class WeatherResponse:
     @property
     def humidity(self):
         return str(self.weatherdata['humidity'])+'%'
+
+    @property
+    def maxtemp(self):
+        return str(self.weatherdata['maxTempC'])+'°C'
+
+    @property
+    def mintemp(self):
+        return str(self.weatherdata['minTempC'])+'°C'
 
 
 def weatherget(location):
