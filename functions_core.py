@@ -130,9 +130,9 @@ def process_cmd(msg, source, target, serv, channels):
                         serv.notice(source.nick, r)
                         return
                 #it's a normal command, let's check if the throttle has ended
-                r = okthrottle(source.userhost)
+                r = okthrottle(source)
                 if r == 'ok':
-                    updatethrottle(source.userhost)
+                    updatethrottle(source)
                     if f.requestchans and f.requestserv:
                         return f(args, source, target, serv, channels)
                     elif f.requestserv:
