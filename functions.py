@@ -8,6 +8,7 @@ import datetime
 import google
 import soundcloud
 import configparser
+import weather
 
 @Function('ping')
 def ping(args, source, target):
@@ -263,3 +264,21 @@ for act in actionslist:
     f = Function(act.name)(act.f)
     f.is_action = True
     register.append(f)
+
+@Function(['w', 'weather'])
+def displayweather(args, source, target):
+    if args is None:
+        return 'please specify a location'
+    location = ' '.join(args).strip()
+    r = weather.weatherget(location)
+    return '{bold}Température{reset}: {0} (min: {1}/max: {2})\n' \
+           '{bold}Vent{reset}: {3} (direction {4})\n{bold}Taux d\'' \
+           'humidité{reset}: {5} ({6} de précipitations)'.format(r.averagetemp,
+                                                          r.mintemp,
+                                                          r.maxtemp,
+                                                          r.windspeed,
+                                                          r.winddir,
+                                                          r.humidity,
+                                                          r.precipmm,
+                                                          bold=format['bold'],
+                                                          reset=format['reset'])
