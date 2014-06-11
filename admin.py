@@ -136,4 +136,4 @@ def saveconfig(args, source, target, serv, channels):
                                                                                                               format['reset'],
                                                                                                               chans,
                                                                                                               serv.get_nickname(),
-                                                                                                              serv['details']['throttle'])
+                                                                                                              server_config['details']['throttle'])

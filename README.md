@@ -38,6 +38,7 @@ Note: every command can be sent to the bot via channel msg, or via privmsg
 | Quit                            | `master` | `DIE [reason]`                                                           |
 | Join a channel                  | `admin`  | `JOIN #channel`                                                          |
 | Part a channel                  | `admin`  | `part #channel [reason]` or `part [reason]` (when on the target channel) |
+| Adjust flood-control (in secs)  | `admin`  | `THROTTLE [time]`
 | Notice an user/channel          | `known`  | `NOTICE user message`                                                    |
 | Performs an action on a channel | `known`  | `ACT #channel action`                                                    |
 | Say something on a channel      | `known`  | `SAY #channel message`                                                   |
