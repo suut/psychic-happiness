@@ -122,7 +122,7 @@ def notice(args, source, target, serv):
 def throttle(args, source, target):
     if args is not None:
         if ''.join(args).isdigit():
-            server_config['details']['throttle'] = ''.join(args)
+            throttle = ''.join(args)
             return 'throttle set to {0}'.format(''.join(args))
         else:
             return 'usage: THROTTLE time'
