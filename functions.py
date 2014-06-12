@@ -27,7 +27,7 @@ hatsu_adjs = ('execrable',
               'abominable',
               'détestable',
               'épouvantable',
- pas               'insalubre',
+              'insalubre',
               'saccagée',
               'ravagée')
 
