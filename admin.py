@@ -105,7 +105,7 @@ def die(args, source, target, serv):
     else:
         if '-restart' in args:
             args.remove('-restart')
-            serv.quit(' '.join(args))
+            serv.quit('restarting')
         else:
             serv.quit(' '.join(args))
             quit(0)
@@ -141,3 +141,12 @@ def saveconfig(args, source, target, serv, channels):
                                                                                                               chans,
                                                                                                               serv.get_nickname(),
                                                                                                               server_config['details']['throttle'])
+
+@Function('showconfig', requestchans=True, requestserv=True, authlvl='master')
+def saveconfig(args, source, target, serv, channels):
+    chans = ','.join(channels.keys())
+    return '{0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
+                                                                                  format['reset'],
+                                                                                  chans,
+                                                                                  serv.get_nickname(),
+                                                                                  server_config['details']['throttle'])
