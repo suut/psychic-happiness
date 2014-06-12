@@ -115,7 +115,7 @@ def help(args, source, target):
             if isinstance(f.cmdname, list):
                 list_of_cmds.append(' = '.join(f.cmdname))
             else:
-                if 'is_action' not in dir(f):
+                if 'is_action' not in dir(f) and f.authlvl == 'none':
                     list_of_cmds.append(f.cmdname)
         return 'commands are: {0}\nto know more about a particular command type {1}help cmdname'.format(', '.join(list_of_cmds), server_config['commands']['cmdprefix'])
     elif len(args) != 1:
