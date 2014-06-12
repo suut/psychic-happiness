@@ -73,7 +73,8 @@ register = []
 def Function(cmdname, authlvl='none', requestserv=False, requestchans=False):
     def decorator(f):
         doc = f.__doc__
-        f = sandbox(f)
+        #f = sandbox(f)
+        #TODO: JUST TESTING, TO UNCOMMENT
         func = _Function(cmdname, authlvl, requestserv, requestchans, f, doc)
         register.append(func)
         return func
@@ -132,8 +133,7 @@ def process_cmd(msg, source, target, serv, channels):
                 #it's a normal command, let's check if the throttle has ended
                 r = okthrottle(source)
                 if r == 'ok':
-                    updatethrottle(source
-                    )
+                    updatethrottle(source)
                     if f.requestchans and f.requestserv:
                         return f(args, source, target, serv, channels)
                     elif f.requestserv:
