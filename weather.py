@@ -1,4 +1,4 @@
-#!/usr/bin/python3.2
+#!/usr/bin/python3.4
 # -*- coding: utf-8 -*-
 
 
@@ -53,7 +53,7 @@ class WeatherResponse:
 
     @property
     def averagetemp(self):
-        return str(self.weatherdata['avgTempC'])+' °C'
+        return str(self.weatherdata['avgTempC'])+'°C'
 
     @property
     def feelsliketemp(self):

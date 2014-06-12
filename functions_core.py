@@ -103,15 +103,9 @@ def updatethrottle(userhost):
 
 def match(f, cmd):
     if isinstance(f.cmdname, list):
-        if cmd in f.cmdname:
-            return True
-        else:
-            return False
+        return cmd in f.cmdname
     else:
-        if f.cmdname == cmd:
-            return True
-        else:
-            return False
+        return f.cmdname == cmd
 
 def process_cmd(msg, source, target, serv, channels):
     # [ ] check if the user is muted
