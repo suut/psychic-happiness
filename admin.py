@@ -142,12 +142,11 @@ def saveconfig(args, source, target, serv, channels):
                                                                                                               serv.get_nickname(),
                                                                                                               server_config['details']['throttle'])
 
-@Function('showconfig', requestchans=True, requestserv=True)
-def saveconfig(args, source, target, serv, channels):
+@Function('showconfig')
+def saveconfig(args, source, target):
     """shows the current configuration"""
-    chans = ','.join(channels.keys())
     return '{0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
                                                                                   format['reset'],
-                                                                                  chans,
-                                                                                  serv.get_nickname(),
+                                                                                  server_config['details']['channels'],
+                                                                                  server_config['details']['nickname'],
                                                                                   server_config['details']['throttle'])
