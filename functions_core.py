@@ -73,8 +73,7 @@ register = []
 def Function(cmdname, authlvl='none', requestserv=False, requestchans=False):
     def decorator(f):
         doc = f.__doc__
-        #f = sandbox(f)
-        #TODO: JUST TESTING, TO UNCOMMENT
+        f = sandbox(f)
         func = _Function(cmdname, authlvl, requestserv, requestchans, f, doc)
         register.append(func)
         return func

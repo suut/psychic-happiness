@@ -103,8 +103,12 @@ def die(args, source, target, serv):
         serv.quit('bye')
         quit(0)
     else:
-        serv.quit(' '.join(args))
-        quit(0)
+        if '-restart' in args:
+            args.remove('-restart')
+            serv.quit(' '.join(args))
+        else:
+            serv.quit(' '.join(args))
+            quit(0)
 
 @Function('notice', requestserv=True, authlvl='known')
 def notice(args, source, target, serv):
