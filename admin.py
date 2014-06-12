@@ -135,7 +135,7 @@ def saveconfig(args, source, target, serv, channels):
     chans = ','.join(channels.keys())
     server_config['details']['channels'] = chans
     server_config['details']['nickname'] = serv.get_nickname()
-    server_config['details']['throttle'] = throttle
+    server_config['details']['throttle'] = str(throttle)
     write_config()
     return 'config writed successfully. {0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
                                                                                                               format['reset'],
