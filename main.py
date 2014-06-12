@@ -1,4 +1,4 @@
-#!/usr/bin/python3.2
+#!/usr/bin/python3.4
 # -*- coding: utf-8 -*-
 
 # IRC bot
@@ -15,7 +15,7 @@
 
 #TODO: saveconfig(), rehash()
 
-import functions, admin #for the code to be executed
+import functions, admin, reload #for the code to be executed
 from core import chosen_server
 from superbot import SuperBot
 

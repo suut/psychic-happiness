@@ -75,7 +75,11 @@ def Function(cmdname, authlvl='none', requestserv=False, requestchans=False):
         doc = f.__doc__
         f = sandbox(f)
         func = _Function(cmdname, authlvl, requestserv, requestchans, f, doc)
-        register.append(func)
+        if func not in register:
+            register.append(func)
+        else:
+            register.pop(register.index(func))
+            register.append(func)
         return func
     return decorator
 

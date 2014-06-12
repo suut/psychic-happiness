@@ -40,7 +40,6 @@ print('will connect to {0} ({1}:{2})'.format(sys.argv[1],
 server_config = configparser.ConfigParser()
 server_config.read('config/{0}.ini'.format(sys.argv[1]))
 details = server_config['details']
-throttle = details['throttle']
 
 def write_config():
     with open('config/{0}.ini'.format(sys.argv[1]), mode='w') as f:
@@ -86,3 +85,5 @@ def split(txt, target):
         else:
             final_text.append(i)
     return final_text
+
+reloadable_modules = ('functions', 'weather', 'google', 'soundcloud', 'parse_links', 'admin')

@@ -1,7 +1,8 @@
 #!/usr/bin/python3.2
 # -*- coding: utf-8 -*-
 
-from functions_core import Function, register, match, Function
+from functions_core import Function, match
+import functions_core
 from core import server_config, format, version
 from random import sample
 import datetime
@@ -9,11 +10,17 @@ import google
 import soundcloud
 import configparser
 import weather
+import importlib, admin, reload
+
+functions_core.register = []
+importlib.reload(admin)
+importlib.reload(reload)
+
 
 @Function('ping')
 def ping(args, source, target):
     """pong!"""
-    return 'pong'
+    return 'ping'
 
 with open('strings/eloges.txt') as file:
     sarah_adjs = file.read().split('\n')
@@ -111,7 +118,7 @@ def help(args, source, target):
     """provides help on commands"""
     if args is None: #showing all functions
         list_of_cmds = []
-        for f in register:
+        for f in functions_core.register:
             if isinstance(f.cmdname, list):
                 list_of_cmds.append(' = '.join(f.cmdname))
             else:
@@ -121,7 +128,7 @@ def help(args, source, target):
     elif len(args) != 1:
         return 'syntax is cmdname'
     else:
-        for i in register:
+        for i in functions_core.register:
             if match(i, args[0].lower()):
                 if i.doc is None:
                     return 'command has no documentation'
@@ -263,10 +270,11 @@ for key, val in zip(actions.keys(), actions.values()):
 for act in actionslist:
     f = Function(act.name)(act.f)
     f.is_action = True
-    register.append(f)
+    functions_core.register.append(f)
 
 @Function(['w', 'weather'])
 def displayweather(args, source, target):
+    """displays the weather of the specified location"""
     if args is None:
         return 'please specify a location'
     location = ' '.join(args).strip()

@@ -7,9 +7,10 @@
 #   * known
 
 from functions_core import Function
+import functions_core
 import hashlib
-from auth_core import uparser, loggedin, LoggedIn, getinfos, require
-from core import server_config, write_config, format
+import auth_core
+from core import server_config, write_config, format, reloadable_modules
 
 
 @Function('auth', requestserv=True)
@@ -18,23 +19,23 @@ def auth(args, source, target, serv):
     if args is None or len(args) < 2:
         serv.notice(source.nick, 'usage: AUTH username password')
         return
-    if args[0] not in uparser.sections():
+    if args[0] not in auth_core.uparser.sections():
         serv.notice(source.nick, 'unknown user')
         return
-    if hashlib.sha1(' '.join(args[1:]).strip().encode()).hexdigest() != uparser[args[0]]['password']:
+    if hashlib.sha1(' '.join(args[1:]).strip().encode()).hexdigest() != auth_core.uparser[args[0]]['password']:
         serv.notice(source.nick, 'invalid password')
         return
-    for user in loggedin:
+    for user in auth_core.loggedin:
         if user.host == source:
             serv.notice(source.nick, 'you\'re already logged in')
             return
-    loggedin.append(LoggedIn(args[0], source))
+    auth_core.loggedin.append(auth_core.LoggedIn(args[0], source))
     serv.notice(source.nick, 'you\'re now logged in')
 
 
 @Function('whoami')
 def whoami(args, source, target):
-    ret = getinfos(source)
+    ret = auth_core.getinfos(source)
     if ret is None and source.nick.lower() == 'sarah':
         return 'you\'re the most beautiful one'
     #TODO: to remove one day
