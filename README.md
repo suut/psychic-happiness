@@ -44,8 +44,10 @@ Note: every command can be sent to the bot via channel msg, or via privmsg
 | Say something on a channel      | `known`  | `SAY #channel message`                                                   |
 | Saves configuration             | `admin`  | `SAVECONFIG`                                                             |
 
+
 ### User commands
 User commands require no authentication, normal user priviledges, and of course: known users, admins and masters can run these commands.
+
 | Description                                | Usage                                                                    |
 | :----------------------------------------: | :----------------------------------------------------------------------: |
 | Pongs you                                  | `PING`                                                                   |
