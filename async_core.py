@@ -51,13 +51,13 @@ class FunctionExecutor(KillableThread):
         self.kwargs = kwargs
 
     def run(self):
-        print(self._f.cmdname)
         ret = self._f(*self.args, **self.kwargs)
         if ret is not None:
             if repr(type(ret)) == '<class \'generator\'>':
                 for i in ret:
                     self._callback(i)
             else:  # TODO: make function to be only generators, not normal functions
+                print('DEPRECATED: function "', self._f.cmdname, '" is using the return statement', sep='')
                 self._callback(ret)
 
 

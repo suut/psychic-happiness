@@ -8,7 +8,6 @@ def parse(text):
     #returns formatted title of the link, or None
     links = re.findall(r'(https?://\S+)', text)
     if len(links) >= 1:
-        print('found link(s):', '; '.join(links))
         url = links[0]
         #let's verify if it's html
         if 'text/html' in requests.head(url).headers.get('content-type'):
