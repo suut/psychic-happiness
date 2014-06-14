@@ -21,7 +21,7 @@ importlib.reload(reload)
 @Function('ping')
 def ping(args, source, target):
     """pong!"""
-    return 'ping'
+    yield 'pong'
 
 with open('strings/eloges.txt') as file:
     sarah_adjs = file.read().split('\n')

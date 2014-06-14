@@ -135,18 +135,16 @@ def process_cmd(msg, source, target, serv, channels, callback):
                 if r == 'ok':
                     updatethrottle(source)
                     if f.requestchans and f.requestserv:
-                        thread = async_core.ControlThread(f, callback, args, source, target, serv, channels)
-                        thread.start()
+                        _args = (args, source, target, serv, channels)
                     elif f.requestserv:
-                        thread = async_core.ControlThread(f, callback, args, source, target, serv)
-                        thread.start()
+                        _args = (args, source, target, serv)
                     elif f.requestchans:
-                        thread = async_core.ControlThread(f, callback, args, source, target, channels)
-                        thread.start()
+                        _args = (args, source, target, channels)
                     else:
                         #NORMAL CASE
-                        thread = async_core.ControlThread(f, callback, args, source, target)
-                        thread.start()
+                        _args = (args, source, target)
+                    thread = async_core.ControlThread(f, callback, *_args)
+                    thread.start()
                 elif r == 'notify':
                     serv.notice(source.nick, 'please wait at least {0} secondes between commands'.format(core.details['throttle']))
                     return

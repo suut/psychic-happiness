@@ -5,6 +5,7 @@ import threading
 import time
 import sys
 import trace
+from inspect import isgeneratorfunction
 
 
 class KillableThread(threading.Thread):
@@ -51,7 +52,13 @@ class FunctionExecutor(KillableThread):
 
     def run(self):
         print(self._f.cmdname)
-        self._callback(self._f(*self.args, **self.kwargs))
+        ret = self._f(*self.args, **self.kwargs)
+        if ret is not None:
+            if repr(type(ret)) == '<class \'generator\'>':
+                for i in ret:
+                    self._callback(i)
+            else:  # TODO: make function to be only generators, not normal functions
+                self._callback(ret)
 
 
 class ControlThread(threading.Thread):

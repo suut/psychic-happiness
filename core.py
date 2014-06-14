@@ -86,4 +86,8 @@ def split(txt, target):
             final_text.append(i)
     return final_text
 
+
 reloadable_modules = ('functions', 'weather', 'google', 'soundcloud', 'parse_links', 'admin')
+
+
+def stop(): raise StopIteration()
