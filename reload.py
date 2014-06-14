@@ -42,9 +42,9 @@ def reloadcmds(args, source, target, serv):
         return '{bold}{underlined}04[VERY EXPERIMENTAL]{reset} now type' \
                ' the command reload -agree in order to reload module "{0}"' \
                ', or -cancel to cancel the query'.format(args[0],
-                                                  bold=format['bold'],
-                                                  underlined=format['underlined'],
-                                                  reset=format['reset'])
+                                                         bold=format['bold'],
+                                                         underlined=format['underlined'],
+                                                         reset=format['reset'])
 
     if args is not None and ''.join(args).strip() == '-agree':
         for i in confirmation:
@@ -52,7 +52,7 @@ def reloadcmds(args, source, target, serv):
                 serv.privmsg(target, 'trying to reload module "{0}"'.format(i[1]))
                 if i[1] not in dir():
                     serv.privmsg(target, 'importing it first..')
-                    m = __import__(i[1]) #TODO: fix that thing
+                    m = __import__(i[1])  # TODO: fix that thing
                 importlib.reload(m)
                 return 'done.'
         return '?'
