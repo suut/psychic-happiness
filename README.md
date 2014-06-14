@@ -43,3 +43,25 @@ Note: every command can be sent to the bot via channel msg, or via privmsg
 | Performs an action on a channel | `known`  | `ACT #channel action`                                                    |
 | Say something on a channel      | `known`  | `SAY #channel message`                                                   |
 | Saves configuration             | `admin`  | `SAVECONFIG`                                                             |
+
+### User commands
+User commands require no authentication, normal user priviledges, and of course: known users, admins and masters can run these commands.
+| Description                                | Usage                                                                    |
+| :----------------------------------------: | :----------------------------------------------------------------------: |
+| Pongs you                                  | `PING`                                                                   |
+| Gives you eye cancer                       | `EYECANCER`                                                              |
+| Obtains the first result from Google       | `G query` or `GOOGLE query`                                              |
+| Obtains the first result from YouTube      | `YT query` or `YOUTUBE query`                                            |
+| Randomises names of film                   | `FILM`                                                                   |
+| A command you can hold on to               | `HELP`                                                                   |
+| Tries to determine exactly who/what you are| `QUISUISJE`                                                              |
+| Tests how the bot handles exceptions       | `ERROR`                                                                  |
+| Gives you a URL to the source code         | `SOURCE`                                                                 |
+| Gives you the current version of the bot   | `VERSION`                                                                |
+| Gives you a RAINBOW (color test) :p        | `RAINBOW`                                                                |
+| Obtains the first result from SoundCloud   | `SC query` or `SOUNDCLOUD query`                                         |
+| Feels the weather at a specified location  | `W city, country` or `WEATHER city, country`                             |
+
+***For the WEATHER command*** If the specified city or country is written in another script instead Latin script, sometimes specifying it in Latin Transliteration helps, instead of เชียงใหม่ , write it as: Chiang Mai.
+
+This is so with characters that are not specified in ***Basic Latin***. Such as: Hafnarfjörður, Iceland; should be transliterated to: Hafnarfjordur, Iceland (Change o with diaeresis to: 'o', and Eth to 'd')
