@@ -153,7 +153,7 @@ def process_cmd(msg, source, target, serv, channels, callback):
         return False
 
 
-def process_privmsg(msg, source, serv, channels):
+def process_privmsg(msg, source, serv, channels, callback):
     # [ ] check if the user is muted
     # [X] retrieve function registry
     # [X] get matching cmdnames
@@ -172,10 +172,12 @@ def process_privmsg(msg, source, serv, channels):
                     serv.notice(source.nick, r)
                     return
             if f.requestserv and f.requestchans:
-                return f(args, source, source.nick, serv, channels)
+                _args = (args, source, source.nick, serv, channels)
             elif f.requestserv:
-                return f(args, source, source.nick, serv)
+                _args = (args, source, source.nick, serv)
             elif f.requestchans:
-                return f(args, source, source.nick, channels)
+                _args = (args, source, source.nick, channels)
             else:
-                return f(args, source, source.nick)
+                _args = (args, source, source.nick)
+            thread = async_core.ControlThread(f, callback, *_args)
+            thread.start()
