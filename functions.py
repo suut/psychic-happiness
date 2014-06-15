@@ -11,6 +11,7 @@ import soundcloud
 import configparser
 import weather
 import importlib, admin, reload
+import codecs ## For ROT13
 
 functions_core.register = []
 importlib.reload(admin)
@@ -290,3 +291,8 @@ def displayweather(args, source, target):
                                                           r.precipmm,
                                                           bold=format['bold'],
                                                           reset=format['reset'])
+
+@Function('rot13')
+def rot13(args, source, target):
+    """Encrypt a text using ROT13 (http://en.wikipedia.org/wiki/ROT13), this only works with English; I'll be making the one for French, Spanish, Greek and many other languages with Abjad writing that I'm interested in."""
+    return codecs.encode(args, "rot-13") 
