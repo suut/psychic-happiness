@@ -30,6 +30,13 @@ class SuperBot(irc.bot.SingleServerIRCBot):
             print('\tchannel joining attempt done.')
         print('bot started.')
         print('nickname:', serv.get_nickname())
+        self._serv = serv
+
+    def callback(self, msg, target):
+        print('callback called')
+        if msg is not None:
+            for i in split(msg, target):
+                self._serv.privmsg(target, i)
 
     def on_kick(self, serv, event):
         if event.arguments[0] == serv.get_nickname():
@@ -37,21 +44,18 @@ class SuperBot(irc.bot.SingleServerIRCBot):
             serv.privmsg(event.target, 'je t\'en foutrais moi du "{0}" pd de {1}'.format(event.arguments[1].strip(), event.source.nick))
 
     def on_pubmsg(self, serv, event):
-        ret = process_cmd(event.arguments[0], event.source, event.target, serv, self.channels)
-        if ret is not None:
-            for i in split(ret, event.target):
-                serv.privmsg(event.target, i)
-        else:
+        match = process_cmd(event.arguments[0], event.source, event.target, serv, self.channels, lambda ret: self.callback(ret, event.target))
+        if not match:
             #it is not a command, let's verify if it contains links
             try:
                 title = parse_links.parse(event.arguments[0])
-            except Exception as e:
+            except Exception:
                 pass
             else:
                 if title is not None:
                     serv.privmsg(event.target, '{0}link{1}: {2}'.format(format['bold'],
-                                                                                     format['reset'],
-                                                                                     title.replace('\n', '')))
+                                                                        format['reset'],
+                                                                        title.replace('\n', '')))
 
     def on_privmsg(self, serv, event):
         ret = process_privmsg(event.arguments[0], event.source, serv, self.channels)

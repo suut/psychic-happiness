@@ -276,6 +276,7 @@ for act in actionslist:
 @Function(['w', 'weather'])
 def displayweather(args, source, target):
     """displays the weather of the specified location"""
+    print(' '.join(args))
     if args is None:
         return 'please specify a location'
     location = ' '.join(args).strip()
@@ -292,8 +293,10 @@ def displayweather(args, source, target):
                                                           bold=format['bold'],
                                                           reset=format['reset'])
 
-@Function('rot13')
-def rot13(args, source, target):
-    """Encrypt a text using ROT13 (http://en.wikipedia.org/wiki/ROT13), this only works with English; I'll be""" \
-    """making the one for French, Spanish, Greek and many other languages with Abjad writing that I'm interested in."""
-    return codecs.encode(' '.join(args), 'rot-13')
+
+#@Function('rot13')
+#def rot13(args, source, target):
+#    """Encrypt a text using ROT13 (http://en.wikipedia.org/wiki/ROT13), this only works with English; I'll be""" \
+#    """making the one for French, Spanish, Greek and many other languages with Abjad writing that I'm interested in."""
+#    return codecs.encode(' '.join(args), 'rot-13')
+

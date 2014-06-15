@@ -7,14 +7,6 @@ import sys
 import trace
 
 
-def callback(ret):
-    print('callback called with argument', ret)
-
-
-def f():
-    return 'zizi'
-
-
 class KillableThread(threading.Thread):
     """A subclass of threading.Thread, with a kill() method provided by courtsey of Connelly Barnes."""
     def __init__(self, *args, **keywords):
@@ -50,23 +42,27 @@ class KillableThread(threading.Thread):
 
 
 class FunctionExecutor(KillableThread):
-    def __init__(self, f: 'the function to execute'):
+    def __init__(self, _f: 'the function to execute', _callback, args, kwargs):
         super().__init__()
-        self._f = f
+        self._f = _f
+        self._callback = _callback
+        self.args = args
+        self.kwargs = kwargs
 
-    def run(self, *args, **kwargs):
-        self.result = self._f(*args, **kwargs)
+    def run(self):
+        print(self._f.cmdname)
+        self._callback(self._f(*self.args, **self.kwargs))
 
 
 class ControlThread(threading.Thread):
-    def __init__(self, f):
+    def __init__(self, _f, _callback, *args, **kwargs):
         super().__init__()
-        self.watched_thread = FunctionExecutor(f)
+        self.watched_thread = FunctionExecutor(_f, _callback, args, kwargs)
+        self._callback = _callback
 
     def run(self):
         self.watched_thread.start()
         time.sleep(3)
         if self.watched_thread.is_alive():
             self.watched_thread.kill()
-            print('timeout.')
-
+            self._callback('timeout')

@@ -9,6 +9,7 @@
 import core
 from time import time
 from auth_core import require, getinfos
+import async_core
 
 
 class IRCException(Exception):
@@ -101,13 +102,15 @@ def okthrottle(userhost):
 def updatethrottle(userhost):
     usedlast[userhost] = {'timestamp': round(time()), 'notified': False}
 
+
 def match(f, cmd):
     if isinstance(f.cmdname, list):
         return cmd in f.cmdname
     else:
         return f.cmdname == cmd
 
-def process_cmd(msg, source, target, serv, channels):
+
+def process_cmd(msg, source, target, serv, channels, callback):
     # [ ] check if the user is muted
     # [X] retrieve function registry
     # [X] get matching cmdnames
@@ -132,18 +135,24 @@ def process_cmd(msg, source, target, serv, channels):
                 if r == 'ok':
                     updatethrottle(source)
                     if f.requestchans and f.requestserv:
-                        return f(args, source, target, serv, channels)
+                        thread = async_core.ControlThread(f, callback, args, source, target, serv, channels)
+                        thread.start()
                     elif f.requestserv:
-                        return f(args, source, target, serv)
+                        thread = async_core.ControlThread(f, callback, args, source, target, serv)
+                        thread.start()
                     elif f.requestchans:
-                        return f(args, source, target, channels)
+                        thread = async_core.ControlThread(f, callback, args, source, target, channels)
+                        thread.start()
                     else:
-                        return f(args, source, target)
+                        #NORMAL CASE
+                        thread = async_core.ControlThread(f, callback, args, source, target)
+                        thread.start()
                 elif r == 'notify':
                     serv.notice(source.nick, 'please wait at least {0} secondes between commands'.format(core.details['throttle']))
                     return
                 elif r == 'donothing':
                     return
+        return False
 
 
 def process_privmsg(msg, source, serv, channels):
