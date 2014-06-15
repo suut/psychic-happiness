@@ -7,12 +7,16 @@ import sys
 import trace
 
 
-def callback():
-    print('callback called')
+def callback(ret):
+    print('callback called with argument', ret)
+
+
+def f():
+    return 'zizi'
 
 
 class KillableThread(threading.Thread):
-    """A subclass of threading.Thread, with a kill()  method provided by courtsey of Connelly Barnes."""
+    """A subclass of threading.Thread, with a kill() method provided by courtsey of Connelly Barnes."""
     def __init__(self, *args, **keywords):
         threading.Thread.__init__(self, *args, **keywords)
         self.killed = False
