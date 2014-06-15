@@ -58,10 +58,12 @@ class SuperBot(irc.bot.SingleServerIRCBot):
                                                                         title.replace('\n', '')))
 
     def on_privmsg(self, serv, event):
-        ret = process_privmsg(event.arguments[0], event.source, serv, self.channels)
-        if ret is not None:
-            for i in split(ret, event.source.nick):
-                serv.privmsg(event.source.nick, i)
+        #ret = process_privmsg(event.arguments[0], event.source, serv, self.channels)
+        #if ret is not None:
+        #    for i in split(ret, event.source.nick):
+        #        serv.privmsg(event.source.nick, i)
+        pass
+        # TODO: re-enable privmsgs
 
     def on_part(self, serv, event):
         #an user just parted

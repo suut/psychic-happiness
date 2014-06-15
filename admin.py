@@ -10,7 +10,7 @@ from functions_core import Function
 import functions_core
 import hashlib
 import auth_core
-from core import server_config, write_config, format, reloadable_modules
+from core import server_config, write_config, format, stop
 
 
 @Function('auth', requestserv=True)
@@ -37,11 +37,12 @@ def auth(args, source, target, serv):
 def whoami(args, source, target):
     ret = auth_core.getinfos(source)
     if ret is None and source.nick.lower() == 'sarah':
-        return 'you\'re the most beautiful one'
+        yield 'you\'re the most beautiful one'
     #TODO: to remove one day
     if ret is None:
-        return 'you\'re nobody'
-    return 'you\'re {0} ({1})'.format(ret['uname'], ret['level'])
+        yield 'you\'re nobody'
+        stop()
+    yield 'you\'re {0} ({1})'.format(ret['uname'], ret['level'])
 
 @Function('say', requestserv=True, authlvl='known')
 def say(args, source, target, serv):
@@ -124,11 +125,13 @@ def throttle(args, source, target):
     if args is not None:
         if ''.join(args).isdigit():
             server_config['details']['throttle'] = ''.join(args)
-            return 'throttle set to {0}'.format(''.join(args))
+            yield 'throttle set to {0}'.format(''.join(args))
+            stop()
         else:
-            return 'usage: THROTTLE time'
+            yield 'usage: THROTTLE time'
+            stop()
     else:
-        return 'throttle actually set to {0}'.format(server_config['details']['throttle'])
+        yield 'throttle actually set to {0}'.format(server_config['details']['throttle'])
 
 
 @Function('saveconfig', requestchans=True, requestserv=True, authlvl='master')
@@ -137,17 +140,17 @@ def saveconfig(args, source, target, serv, channels):
     server_config['details']['channels'] = chans
     server_config['details']['nickname'] = serv.get_nickname()
     write_config()
-    return 'config writed successfully. {0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
-                                                                                                              format['reset'],
-                                                                                                              chans,
-                                                                                                              serv.get_nickname(),
-                                                                                                              server_config['details']['throttle'])
+    yield 'config writed successfully. {0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
+                                                                                                             format['reset'],
+                                                                                                             chans,
+                                                                                                             serv.get_nickname(),
+                                                                                                             server_config['details']['throttle'])
 
 @Function('showconfig')
 def saveconfig(args, source, target):
     """shows the current configuration"""
-    return '{0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
-                                                                                  format['reset'],
-                                                                                  server_config['details']['channels'],
-                                                                                  server_config['details']['nickname'],
-                                                                                  server_config['details']['throttle'])
+    yield '{0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
+                                                                                 format['reset'],
+                                                                                 server_config['details']['channels'],
+                                                                                 server_config['details']['nickname'],
+                                                                                 server_config['details']['throttle'])
