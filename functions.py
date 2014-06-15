@@ -4,7 +4,7 @@
 from functions_core import Function, match
 import functions_core
 from core import server_config, format, version, stop
-from random import sample
+import random
 import datetime
 import google
 import soundcloud
@@ -43,16 +43,19 @@ hatsu_adjs = ('execrable',
 @Function('sarah')
 def sarah(args, source, target):
     """vous dira qui est-ce... :)"""
-    yield 'la plus {0}'.format(sample(sarah_adjs, 1)[0])
+    seed = int(''.join(args)) % len(sarah_adjs) if args is not None and ''.join(args).isdigit() else random.randint(0, len(sarah_adjs))
+    yield 'la plus {0}'.format(sarah_adjs[seed])
 
 
 @Function('hatsu', requestchans=True)
 def hatsu(args, source, target, channels):
     """vous dira qui est-ce... :)"""
-    if 'hatsu' not in channels[target].userdict.keys():
-        yield 'la plus {0}'.format(sample(hatsu_adjs, 1)[0])
+    if target[0] == '#' and 'hatsu' not in channels[target].userdict.keys():
+        seed = int(''.join(args)) % len(hatsu_adjs) if args is not None and ''.join(args).isdigit() else random.randint(0, len(hatsu_adjs))
+        yield 'la plus {0}'.format(hatsu_adjs[seed])
     else:
-        yield 'la plus {0}'.format(sample(sarah_adjs, 1)[0])
+        seed = int(''.join(args)) % len(sarah_adjs) if args is not None and ''.join(args).isdigit() else random.randint(0, len(sarah_adjs))
+        yield 'la plus {0}'.format(sarah_adjs[seed])
 
 
 @Function('eyecancer')
