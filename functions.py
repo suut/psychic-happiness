@@ -294,5 +294,6 @@ def displayweather(args, source, target):
 
 @Function('rot13')
 def rot13(args, source, target):
-    """Encrypt a text using ROT13 (http://en.wikipedia.org/wiki/ROT13), this only works with English; I'll be making the one for French, Spanish, Greek and many other languages with Abjad writing that I'm interested in."""
-    return codecs.encode(args, "rot-13") 
+    """Encrypt a text using ROT13 (http://en.wikipedia.org/wiki/ROT13), this only works with English; I'll be""" \
+    """making the one for French, Spanish, Greek and many other languages with Abjad writing that I'm interested in."""
+    return codecs.encode(' '.join(args), 'rot-13')
