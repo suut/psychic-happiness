@@ -115,8 +115,8 @@ def process_cmd(msg, source, target, serv, channels, callback):
     # [ ] check if the user is muted
     # [X] retrieve function registry
     # [X] get matching cmdnames
-    if msg[0] == core.server_config['commands']['cmdprefix'] and len(msg) > 1 and ''.join(set(msg.strip())) != core.server_config['commands']['cmdprefix']:
-                                                                                    # allows to type e.g. "..."
+    if msg[0] in core.server_config['commands']['cmdprefix'] and len(msg) > 1:
+
         msg = msg[1:].split()
         cmd = msg[0].lower()
         args = None

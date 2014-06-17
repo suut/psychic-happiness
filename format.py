@@ -1,7 +1,7 @@
 #!/usr/bin/python3.4
 # -*- coding: utf-8 -*-
 
-import enum
+from forbiddenfruit import curse
 
 
 controlcodes = {'bold':        '\x02',
@@ -61,3 +61,11 @@ class Color:
         return self.__str__()
 
 color = Color()
+
+oldformat = str.format #automatically parsing the color tags with the builtin str type
+def newformat(self, *args, **kwargs):
+    if 'color' not in kwargs.keys():  # not including it twice
+        return oldformat(self, *args, color=color, **kwargs)
+    else:
+        return oldformat(self, *args, **kwargs)
+curse(str, 'format', newformat)

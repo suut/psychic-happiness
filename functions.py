@@ -83,8 +83,7 @@ def search(args, source, target):
               '{color.bold}{color.underlined}{}{color.reset}'.format(r.title,
                                                                      r.display_url,
                                                                      r.abstract,
-                                                                     r.link,
-                                                                     color=format.color)
+                                                                     r.link)
         stop()
     yield 'no query specified'
 
@@ -102,8 +101,7 @@ def youtube(args, source, target):
         yield '{color.bold}{}{color.reset} — {}\n{}\n{color.bold}{color.underlined}http://youtu.be/{}{color.reset}'.format(r.title,
                                                                                                                            r.channel,
                                                                                                                            r.description,
-                                                                                                                           r.id,
-                                                                                                                           color=format.color)
+                                                                                                                           r.id)
         stop()
     yield 'no query specified'
 
@@ -128,8 +126,8 @@ def help(args, source, target):
             else:
                 if 'is_action' not in dir(f) and f.authlvl == 'none':
                     list_of_cmds.append(f.cmdname)
-        yield 'commands are: {0}'.format(', '.join(list_of_cmds))
-        yield 'to know more about a particular command type {0}help cmdname'.format(server_config['commands']['cmdprefix'])
+        yield '{color.bold}commands are{color.reset}: {0}'.format(', '.join(list_of_cmds))
+        yield 'to know more about a particular command type {0}help cmdname'.format(server_config['commands']['cmdprefix'][0])
         stop()
     elif len(args) != 1:
         yield 'syntax is cmdname'
@@ -140,7 +138,7 @@ def help(args, source, target):
                 if i.doc is None:
                     yield 'command has no documentation'
                 else:
-                    yield '{color.bold}{}{color.reset}: {}'.format(args[0].lower(), i.doc, color=format.color)
+                    yield '{color.bold}{}{color.reset}: {}'.format(args[0].lower(), i.doc)
                 stop()
         yield 'unknown command "{0}"'.format(args[0].lower())
 
@@ -212,8 +210,7 @@ def scsearch(args, source, target):
         yield '{color.bold}{}{color.reset} — {}\n{}\n{color.underlined}{color.bold}{}{color.reset}'.format(r['title'],
                                                                                                            r['username'],
                                                                                                            r['description'].replace('\n', '').replace('\r', '')[:400],
-                                                                                                           r['url'],
-                                                                                                           color=format.color)
+                                                                                                           r['url'])
         stop()
     yield 'no query specified'
 
@@ -296,8 +293,7 @@ def displayweather(args, source, target):
                                                                            r.windspeed,
                                                                            r.winddir,
                                                                            r.humidity,
-                                                                           r.precipmm,
-                                                                           format.color)
+                                                                           r.precipmm)
 
 
 @Function('rot13')

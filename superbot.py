@@ -54,7 +54,7 @@ class SuperBot(irc.bot.SingleServerIRCBot):
                 pass
             else:
                 if title is not None:
-                    serv.privmsg(event.target, '{color.bold}link{color.reset}: {}'.format(title.replace('\n', ''), color=format.color))
+                    serv.privmsg(event.target, '{color.bold}link{color.reset}: {}'.format(title.replace('\n', '')))
 
     def on_privmsg(self, serv, event):
         process_privmsg(event.arguments[0], event.source, serv, self.channels, lambda ret: self.callback(ret, event.source.nick))

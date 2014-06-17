@@ -15,6 +15,7 @@
 
 #TODO: saveconfig(), rehash()
 
+import format #import it first because it hacks the builtin str
 import functions, admin, reload #for the code to be executed
 from core import chosen_server
 from superbot import SuperBot
