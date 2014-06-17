@@ -11,6 +11,7 @@ import functions_core
 import hashlib
 import auth_core
 from core import server_config, write_config, format, stop
+import sys
 
 
 @Function('auth', requestserv=True)
@@ -110,7 +111,7 @@ def die(args, source, target, serv):
             serv.quit('restarting')
         else:
             serv.quit(' '.join(args))
-            quit(0)
+            sys.exit()
 
 @Function('notice', requestserv=True, authlvl='known')
 def notice(args, source, target, serv):

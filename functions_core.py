@@ -91,6 +91,7 @@ def okthrottle(userhost):
     if userhost in usedlast.keys():
         if round(time())-usedlast[userhost]['timestamp'] < int(core.details['throttle']):
             if getinfos(userhost) is not None:
+                #if the user is authed
                 return 'ok'
             if not usedlast[userhost]['notified']:
                 usedlast[userhost]['notified'] = True
@@ -145,6 +146,7 @@ def process_cmd(msg, source, target, serv, channels, callback):
                         _args = (args, source, target)
                     thread = async_core.ControlThread(f, callback, *_args)
                     thread.start()
+                    return
                 elif r == 'notify':
                     serv.notice(source.nick, 'please wait at least {0} secondes between commands'.format(core.details['throttle']))
                     return
