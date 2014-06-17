@@ -10,8 +10,9 @@ from functions_core import Function
 import functions_core
 import hashlib
 import auth_core
-from core import server_config, write_config, format, stop
+from core import server_config, write_config, stop
 import sys
+import format
 
 
 @Function('auth', requestserv=True)
@@ -48,18 +49,24 @@ def whoami(args, source, target):
 @Function('say', requestserv=True, authlvl='known')
 def say(args, source, target, serv):
     # args should be (chan, text)
+    if args is not None and target[0] == '#' and args[0][0] != '#':
+        yield ' '.join(args).format(color=format.color)
+        stop()
     if args is None or len(args) < 2:
         serv.notice(source.nick, 'args should be (chan, text)')
-        return
-    serv.privmsg(args[0], ' '.join(args[1:]))
+        stop()
+    serv.privmsg(args[0], ' '.join(args[1:]).format(color=format.color))
 
 @Function('act', requestserv=True, authlvl='known')
 def act(args, source, target, serv):
     # args should be (chan, text)
+    if args is not None and target[0] == '#' and args[0][0] != '#':
+        serv.action(target, ' '.join(args).format(color=format.color))
+        return
     if args is None or len(args) < 2:
         serv.notice(source.nick, 'args should be (chan, text)')
         return
-    serv.action(args[0], ' '.join(args[1:]))
+    serv.action(args[0], ' '.join(args[1:]).format(color=format.color))
 
 @Function('nick', requestserv=True, authlvl='master')
 def nick(args, source, target, serv):
@@ -119,7 +126,7 @@ def notice(args, source, target, serv):
         serv.notice(source.nick, 'args should be (target, text)')
         return
     else:
-        serv.notice(args[0], ' '.join(args[1:]))
+        serv.notice(args[0], ' '.join(args[1:]).format(color=format.color))
 
 @Function('throttle', authlvl='admin')
 def throttle(args, source, target):
@@ -141,17 +148,15 @@ def saveconfig(args, source, target, serv, channels):
     server_config['details']['channels'] = chans
     server_config['details']['nickname'] = serv.get_nickname()
     write_config()
-    yield 'config writed successfully. {0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
-                                                                                                             format['reset'],
-                                                                                                             chans,
-                                                                                                             serv.get_nickname(),
-                                                                                                             server_config['details']['throttle'])
+    yield 'config writed successfully. {color.bold}channels{color.reset}: {}; {}nickname{}: {}; {color.bold}throttle{color.reset}: {}'.format(chans,
+                                                                                                                                              serv.get_nickname(),
+                                                                                                                                              server_config['details']['throttle'],
+                                                                                                                                              color=format.color)
 
 @Function('showconfig')
 def saveconfig(args, source, target):
     """shows the current configuration"""
-    yield '{0}channels{1}: {2}; {0}nickname{1}: {3}; {0}throttle{1}: {4}'.format(format['bold'],
-                                                                                 format['reset'],
-                                                                                 server_config['details']['channels'],
-                                                                                 server_config['details']['nickname'],
-                                                                                 server_config['details']['throttle'])
+    yield '{color.bold}channels{color.reset}: {}; {color.bold}nickname{color.reset}: {}; {color.bold}throttle{color.reset}: {}'.format(server_config['details']['channels'],
+                                                                                                                                       server_config['details']['nickname'],
+                                                                                                                                       server_config['details']['throttle'],
+                                                                                                                                       color=format.color)

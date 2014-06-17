@@ -3,7 +3,8 @@
 
 from functions_core import Function, match
 import functions_core
-from core import server_config, format, version, stop
+from core import server_config, version, stop
+import format
 import random
 import datetime
 import google
@@ -61,7 +62,7 @@ def hatsu(args, source, target, channels):
 @Function('eyecancer')
 def eyecancer(args, source, target):
     """just try it :)"""
-    yield '13,10UNTZ2,3UNTZ2,7UNTZ2,7UNTZ6,13UNTZ12,5UNTZ4,10UNTZ11,6UNTZ9,13UNTZ4,13UNTZ3,11UNTZ3,' \
+    yield '13,10UNTZ2,3UNTZ2,7UNTZ2,7UNTZ6,13UNTZ12,5UNTZ4,10UNTZ11,6UNTZ9,13UNTZ4,13UNTZ3,11UNTZ3,' \
           '7UNTZ7,9UNTZ6,10UNTZ9,2UNTZ10,9UNTZ10,7UNTZ4,11UNTZ3,13UNTZ12,11UNTZ9,6UNTZ2,11UNTZ13,7UNTZ3,' \
           '9UNTZ13,10UNTZ2,10UNTZ8,2UNTZ10,5UNTZ9,10UNTZ9,4UNTZ6,4UNTZ6,9UNTZ7,8UNTZ8,13UNTZ5,11UNTZ10,' \
           '5UNTZ8,10UNTZ5,10UNTZ2,7UNTZ12,8UNTZ2,8UNTZ9,12UNTZ4,10UNTZ6,3UNTZ2,6UNTZ11,6UNTZ5,13UNTZ8,' \
@@ -78,15 +79,12 @@ def search(args, source, target):
         except IndexError:
             yield 'no results'
             stop()
-        yield '{0}{1}{2} — {3}\n{4}\n{5}{6}{7}{8}'.format(format['bold'],
-                                                           r.title,
-                                                           format['reset'],
-                                                           r.display_url,
-                                                           r.abstract,
-                                                           format['bold'],
-                                                           format['underlined'],
-                                                           r.link,
-                                                           format['reset'])
+        yield '{color.bold}{}{color.reset} — {}\n{}\n' \
+              '{color.bold}{color.underlined}{}{color.reset}'.format(r.title,
+                                                                     r.display_url,
+                                                                     r.abstract,
+                                                                     r.link,
+                                                                     color=format.color)
         stop()
     yield 'no query specified'
 
@@ -101,15 +99,11 @@ def youtube(args, source, target):
         except IndexError:
             yield 'no results'
             stop()
-        yield '{0}{1}{2} — {3}\n{4}\n{5}{6}http://youtu.be/{7}{8}'.format(format['bold'],
-                                                                          r.title,
-                                                                          format['reset'],
-                                                                          r.channel,
-                                                                          r.description,
-                                                                          format['bold'],
-                                                                          format['underlined'],
-                                                                          r.id,
-                                                                          format['reset'])
+        yield '{color.bold}{}{color.reset} — {}\n{}\n{color.bold}{color.underlined}http://youtu.be/{}{color.reset}'.format(r.title,
+                                                                                                                           r.channel,
+                                                                                                                           r.description,
+                                                                                                                           r.id,
+                                                                                                                           color=format.color)
         stop()
     yield 'no query specified'
 
@@ -136,15 +130,18 @@ def help(args, source, target):
                     list_of_cmds.append(f.cmdname)
         yield 'commands are: {0}'.format(', '.join(list_of_cmds))
         yield 'to know more about a particular command type {0}help cmdname'.format(server_config['commands']['cmdprefix'])
+        stop()
     elif len(args) != 1:
         yield 'syntax is cmdname'
+        stop()
     else:
         for i in functions_core.register:
             if match(i, args[0].lower()):
                 if i.doc is None:
                     yield 'command has no documentation'
                 else:
-                    yield '{0}{1}{2}: {3}'.format(format['bold'], args[0].lower(), format['reset'], i.doc)
+                    yield '{color.bold}{}{color.reset}: {}'.format(args[0].lower(), i.doc, color=format.color)
+                stop()
         yield 'unknown command "{0}"'.format(args[0].lower())
 
 
@@ -172,13 +169,13 @@ def error(args, source, target):
 @Function('source')
 def source(args, source, target):
     """prints the URL of the source code (on github)"""
-    yield '{0}source code{1}: https://github.com/suut/psychic-happiness/tree/v2/'.format(format['bold'], format['reset'])
+    yield '{color.bold}source code{color.reset}: https://github.com/suut/psychic-happiness/tree/v2/'
 
 
 @Function('version')
 def version_(args, source, target):
     """prints the actual bot version"""
-    yield version
+    yield '{color.bold.red}' + version + '{color.reset}'
 
 
 with open('strings/drugs.txt') as file:
@@ -188,9 +185,7 @@ with open('strings/drugs.txt') as file:
 def dotd(args, source, target):
     """drug of the day :)"""
     seed = int('{0}{1}'.format(datetime.datetime.today().month, datetime.datetime.today().day))
-    yield '{0}drug of the day{1}: {2}'.format(format['bold'],
-                                              format['reset'],
-                                              list_drugs[seed%len(list_drugs)])
+    yield '{color.bold}drug of the day{color.reset}: ' + list_drugs[seed%len(list_drugs)]
 
 
 @Function('lapin')
@@ -214,15 +209,11 @@ def scsearch(args, source, target):
         if r is None:
             yield 'no results'
             stop()
-        yield '{0}{1}{2} — {3}\n{4}\n{5}{6}{7}{8}'.format(format['bold'],
-                                                          r['title'],
-                                                          format['reset'],
-                                                          r['username'],
-                                                          r['description'].replace('\n', '').replace('\r', '')[:400],
-                                                          format['underlined'],
-                                                          format['bold'],
-                                                          r['url'],
-                                                          format['reset'])
+        yield '{color.bold}{}{color.reset} — {}\n{}\n{color.underlined}{color.bold}{}{color.reset}'.format(r['title'],
+                                                                                                           r['username'],
+                                                                                                           r['description'].replace('\n', '').replace('\r', '')[:400],
+                                                                                                           r['url'],
+                                                                                                           color=format.color)
         stop()
     yield 'no query specified'
 
@@ -297,17 +288,16 @@ def displayweather(args, source, target):
         stop()
     location = ' '.join(args).strip()
     r = weather.weatherget(location)
-    yield '{bold}Température{reset}: {0} (min: {1}/max: {2})\n' \
-          '{bold}Vent{reset}: {3} (direction {4})\n{bold}Taux d\'' \
-          'humidité{reset}: {5} ({6} de précipitations)'.format(r.averagetemp,
-                                                                r.mintemp,
-                                                                r.maxtemp,
-                                                                r.windspeed,
-                                                                r.winddir,
-                                                                r.humidity,
-                                                                r.precipmm,
-                                                                bold=format['bold'],
-                                                                reset=format['reset'])
+    yield '{color.bold}Température{color.reset}: {0} (min: {1}/max: {2})\n' \
+          '{color.bold}Vent{color.reset}: {3} (direction {4})\n{color.bold}Taux d\'' \
+          'humidité{color.resetreset}: {5} ({6} de précipitations)'.format(r.averagetemp,
+                                                                           r.mintemp,
+                                                                           r.maxtemp,
+                                                                           r.windspeed,
+                                                                           r.winddir,
+                                                                           r.humidity,
+                                                                           r.precipmm,
+                                                                           format.color)
 
 
 @Function('rot13')

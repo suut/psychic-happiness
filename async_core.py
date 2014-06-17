@@ -6,6 +6,7 @@ import time
 import sys
 import trace
 from inspect import isgeneratorfunction
+import format
 
 
 class KillableThread(threading.Thread):
@@ -55,10 +56,10 @@ class FunctionExecutor(KillableThread):
         if ret is not None:
             if repr(type(ret)) == '<class \'generator\'>':
                 for i in ret:
-                    self._callback(i)
+                    self._callback(i.format(color=format.color))
             else:  # TODO: make function to be only generators, not normal functions
                 print('DEPRECATED: function "', self._f.cmdname, '" is using the return statement', sep='')
-                self._callback(ret)
+                self._callback(ret.format(color=format.color))
 
 
 class ControlThread(threading.Thread):

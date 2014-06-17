@@ -4,9 +4,8 @@
 #we need to do it from the outside for an evident reason..
 
 #we need the strict minimum
-
 from functions_core import Function
-from core import reloadable_modules, format, stop
+from core import reloadable_modules, stop
 import importlib, functions, soundcloud, google, weather, parse_links, admin
 
 
