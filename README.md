@@ -33,8 +33,8 @@ def my_func(args, source, target):
 * You can use `return` in a function but this is deprecated. If you want to emulate the behavior of `return`, just add `stop()` the line after your `yield`.
 
 ### Colors
-* You can chain the attributes in whatever order you want, like that: {colors.red.blue.bold.underlined.italic}. You can specify up to two colors, first will be the text color, and second will be background color. Valid attributes are: bold, underlined, italic, reverse (inverses background and text color), and reset, to reset every attributes. Valid colors could be found in format.py.
-* If you're using the serv object directly, and you need colors, you'll need to add `.format(color=format.color)` after your string. Make sure `format` is included.
+* You can chain the attributes in whatever order you want, like that: `{colors.red.blue.bold.underlined.italic}`. You can specify up to two colors, first will be the text color, and second will be background color. Valid attributes are: bold, underlined, italic, reverse (inverses background and text color), and reset, to reset every attributes. Valid colors could be found in format.py.
+* If you're using the serv object directly, and you need colors, you'll need to add `.format()` after your string.
 
 Note: every command can be sent to the bot via channel msg, or via privmsg
 ### Admin commands
@@ -50,9 +50,9 @@ Note: every command can be sent to the bot via channel msg, or via privmsg
 | Adjust flood-control (in secs)  | `admin`  | `THROTTLE [time]`                                                        |
 | Saves configuration             | `admin`  | `SAVECONFIG`                                                             |
 | Notice a user/channel           | `known`  | `NOTICE user message`                                                    |
-| Performs an action on a channel | everyone | `ACT #channel action`                                                    |
-| Say something on a channel      | everyone | `SAY #channel message`                                                   |
-| Show configuration              | everyone | `SHOWCONFIG`                                                             |
+| Performs an action on a channel |          | `ACT #channel action`                                                    |
+| Say something on a channel      |          | `SAY #channel message`                                                   |
+| Show configuration              |          | `SHOWCONFIG`                                                             |
 
 
 ### User commands
