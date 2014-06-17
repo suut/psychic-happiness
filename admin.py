@@ -46,7 +46,7 @@ def whoami(args, source, target):
         stop()
     yield 'you\'re {0} ({1})'.format(ret['uname'], ret['level'])
 
-@Function('say', requestserv=True, authlvl='known')
+@Function('say', requestserv=True)
 def say(args, source, target, serv):
     # args should be (chan, text)
     if args is not None and target[0] == '#' and args[0][0] != '#':
@@ -57,7 +57,7 @@ def say(args, source, target, serv):
         stop()
     serv.privmsg(args[0], ' '.join(args[1:]).format(color=format.color))
 
-@Function('act', requestserv=True, authlvl='known')
+@Function('act', requestserv=True)
 def act(args, source, target, serv):
     # args should be (chan, text)
     if args is not None and target[0] == '#' and args[0][0] != '#':
