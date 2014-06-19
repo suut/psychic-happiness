@@ -186,19 +186,6 @@ def dotd(args, source, target):
     yield '{color.bold}drug of the day{color.reset}: ' + list_drugs[seed%len(list_drugs)]
 
 
-@Function('lapin')
-def lapin(args, source, target):
-    """lapin!!"""
-    yield 'celui qui a une grande..paire d\'oreilles'
-
-
-@Function('rainbow')
-def rainbow(args, source, target):
-    """a 'rainbow'"""
-    for i in range(3):
-        yield '04,04...07,07...08,08...03,03...02,02...13,13...06,06...'
-
-
 @Function(['sc', 'soundcloud'])
 def scsearch(args, source, target):
     """performs a search on soundcloud"""

@@ -111,12 +111,13 @@ def match(f, cmd):
         return f.cmdname == cmd
 
 
+
+
 def process_cmd(msg, source, target, serv, channels, callback):
     # [ ] check if the user is muted
     # [X] retrieve function registry
     # [X] get matching cmdnames
     if msg[0] in core.server_config['commands']['cmdprefix'] and len(msg) > 1:
-
         msg = msg[1:].split()
         cmd = msg[0].lower()
         args = None
@@ -152,6 +153,9 @@ def process_cmd(msg, source, target, serv, channels, callback):
                     return
                 elif r == 'donothing':
                     return
+        #now let's verify if it's a trigger
+        if cmd in core.triggers.keys():
+            callback(core.triggers[cmd].format().replace('\\n', '\n'))
         return False
 
 

@@ -88,3 +88,11 @@ reloadable_modules = ('functions', 'weather', 'google', 'soundcloud', 'parse_lin
 
 
 def stop(): raise StopIteration()
+
+triggersparser = configparser.ConfigParser()
+triggersparser.read('strings/triggers.ini')
+triggers = triggersparser['triggers']
+
+def savetriggers():
+    with open('strings/triggers.ini', mode='w') as file:
+        triggersparser.write(file)

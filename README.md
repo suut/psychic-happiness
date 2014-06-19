@@ -22,13 +22,23 @@ from functions_core import Function
 def my_func(args, source, target):
   """the thing to be printed by the help command"""
   # do something
+
   yield 'this will be printed back to channel'
+
   yield 'and this too'
+
   yield 'yet another line'
-  yield '{color.red.bold}this will be bold red'
+
+  yield '{color.red.bold}this will be bold red{color.reset} and this will have no color'
+
+  stop()
+  # this line is an equivalent of:
+  raise StopIteration()
+
+  yield 'this line won't be sent'
 ```
 * If the function requires a certain auth level (`known`, `admin` or `master`), specify it in the decorator: `@Function('myfunc', authlvl='known')`.
-* If the function requires the Channel object, specify it in the decorator: `@Function('myfunc', requestchans=True) then modify the function header: `def my_func(args, source, target, channels)`. To get the userlist: `channels[target].userdict.keys()`.
+* If the function requires the Channel object, specify it in the decorator: `@Function('myfunc', requestchans=True)` then modify the function header: `def my_func(args, source, target, channels)`. To get the userlist: `channels[target].userdict.keys()`.
 * If the function requires special action of the serv (e.g. notice of private message), specify it in the decorator: `@Function('myfunc', requestserv=True)` then modify the function header: `def my_func(args, source, target, serv)`.
 * You can use `return` in a function but this is deprecated. If you want to emulate the behavior of `return`, just add `stop()` the line after your `yield`.
 
@@ -48,8 +58,9 @@ Note: every command can be sent to the bot via channel msg, or via privmsg
 | Join a channel                  | `admin`  | `JOIN #channel`                                                          |
 | Part a channel                  | `admin`  | `part #channel [reason]` or `part [reason]` (when on the target channel) |
 | Adjust flood-control (in secs)  | `admin`  | `THROTTLE [time]`                                                        |
-| Saves configuration             | `admin`  | `SAVECONFIG`                                                             |
+| Saves configuration & triggers  | `admin`  | `SAVECONFIG`                                                             |
 | Notice a user/channel           | `known`  | `NOTICE user message`                                                    |
+| Add a trigger                   | `known`  | `ADDTRIGGER triggername text`                                            |
 | Performs an action on a channel |          | `ACT #channel action`                                                    |
 | Say something on a channel      |          | `SAY #channel message`                                                   |
 | Show configuration              |          | `SHOWCONFIG`                                                             |

@@ -10,7 +10,7 @@ from functions_core import Function
 import functions_core
 import hashlib
 import auth_core
-from core import server_config, write_config, stop
+from core import server_config, write_config, stop, triggers, savetriggers
 import sys
 import format
 
@@ -148,13 +148,24 @@ def saveconfig(args, source, target, serv, channels):
     server_config['details']['channels'] = chans
     server_config['details']['nickname'] = serv.get_nickname()
     write_config()
-    yield 'config writed successfully. {color.bold}channels{color.reset}: {}; {}nickname{}: {}; {color.bold}throttle{color.reset}: {}'.format(chans,
+    savetriggers()
+    yield 'config writed successfully. {color.bold}channels{color.reset}: {}; {color.bold}nickname{color.reset}: {}; {color.bold}throttle{color.reset}: {}'.format(chans,
                                                                                                                                               serv.get_nickname(),
                                                                                                                                               server_config['details']['throttle'])
 
 @Function('showconfig')
-def saveconfig(args, source, target):
+def showconfig(args, source, target):
     """shows the current configuration"""
     yield '{color.bold}channels{color.reset}: {}; {color.bold}nickname{color.reset}: {}; {color.bold}throttle{color.reset}: {}'.format(server_config['details']['channels'],
                                                                                                                                        server_config['details']['nickname'],
                                                                                                                                        server_config['details']['throttle'])
+
+
+@Function('addtrigger', authlvl='known')
+def addtrigger(args, source, target):
+    if args is None or len(args) < 2:
+        yield 'syntax: ADDTRIGGER name text'
+        stop()
+    name, text = args[0], ' '.join(args[1:])
+    triggers[name] = text
+    yield 'trigger {} added for "{}"'.format(name, text)
