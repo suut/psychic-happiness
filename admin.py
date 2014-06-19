@@ -186,3 +186,7 @@ def deltrigger(args, source, target):
         yield 'trigger {} not found'.format(name)
         stop()
 
+
+@Function('showtriggers')
+def showtriggers(args, source, target):
+    yield '{color.bold}triggers{color.reset}: {}'.format(', '.join(triggers.keys()))

@@ -4,6 +4,7 @@
 from functions_core import Function, match
 import functions_core
 from core import server_config, version, stop
+from random import sample
 import format
 import random
 import datetime
