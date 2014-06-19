@@ -161,11 +161,28 @@ def showconfig(args, source, target):
                                                                                                                                        server_config['details']['throttle'])
 
 
-@Function('addtrigger', authlvl='known')
+@Function('addtrigger')
 def addtrigger(args, source, target):
+    """add a trigger"""
     if args is None or len(args) < 2:
         yield 'syntax: ADDTRIGGER name text'
         stop()
     name, text = args[0], ' '.join(args[1:])
     triggers[name] = text
     yield 'trigger {} added for "{}"'.format(name, text)
+
+
+@Function('deltrigger', authlvl='known')
+def deltrigger(args, source, target):
+    if args is None or len(args) != 1:
+        yield 'syntax: DELTRIGGER name'
+        stop()
+    name = args[0]
+    if name in triggers.keys():
+        del triggers[name]
+        yield 'trigger {} successfully deleted'.format(name)
+        stop()
+    else:
+        yield 'trigger {} not found'.format(name)
+        stop()
+
