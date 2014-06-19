@@ -133,7 +133,7 @@ def process_cmd(msg, source, target, serv, channels, callback):
                         serv.notice(source.nick, r)
                         return
                 #it's a normal command, let's check if the throttle has ended
-                if cmd.muted:
+                #if cmd.muted:
                 r = okthrottle(source)
                 if r == 'ok':
                     updatethrottle(source)
