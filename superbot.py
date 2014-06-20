@@ -11,7 +11,7 @@ class SuperBot(irc.bot.SingleServerIRCBot):
     def __init__(self, server):
         print('initializing...')
         super().__init__((server,), server.nickname, server.username, server.realname)
-        self.connection.buffer_class.errors = 'replace' # prevents crashing due to unicode errors
+        self.connection.buffer_class.errors = 'replace'  # prevents crashing due to unicode errors
         self._channels = server.channels
         self.modes = server.modes
         print('bot initialized.')
