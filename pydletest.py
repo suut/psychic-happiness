@@ -7,8 +7,20 @@ import pydle
 
 
 class SuperBot(pydle.Client):
+    def on_raw_335(self, params):
+        source, target, message = params._kw['params']
+        self._whois_info[target]['bot'] = True
+
+
     def on_connect(self):
-        self.join('#pigeons')
+        self.join('#kitchen')
+
+    def cycle(self, channel=None):
+        if channel is not None:
+            super().cycle(channel)
+        else:
+            for channel, password in zip(self.channels.keys(), self.channels.values()):
+                self.join(channel, password)
 
     @pydle.coroutine
     def on_channel_message(self, target, source, message):
@@ -16,6 +28,8 @@ class SuperBot(pydle.Client):
         info = yield self.whois(source)
         for key, val in zip(info.keys(), info.values()):
             print(key, '=>', val)
+        print('\n')
+        print(self.server_tag)
 
 
 
