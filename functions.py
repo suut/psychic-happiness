@@ -175,7 +175,7 @@ def source(args, source, target):
 def version_(args, source, target):
     """prints the actual bot version"""
     yield '{color.bold.red}' + version + '{color.reset}'
-
+ n
 
 with open('strings/drugs.txt') as file:
     list_drugs = file.read().split('\n')

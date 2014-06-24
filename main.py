@@ -22,4 +22,4 @@ from superbot import SuperBot
 
 bot = SuperBot(chosen_server)
 
-bot.start()
+#bot.start()

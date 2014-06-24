@@ -10,6 +10,7 @@ from pydle.client import BasicClient, NotInChannel, AlreadyInChannel
 from . import parsing
 from . import protocol
 
+# {'nickname': 'superbot', 'away_message': None, 'away': False, 'identified': False, 'hostname': 'flyingdutchman.dij.nl', 'realname': "suut's bot", 'username': 'abuse', 'account': None}
 
 class RFC1459Support(BasicClient):
     """ Basic RFC1459 client. """

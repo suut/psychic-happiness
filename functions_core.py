@@ -111,10 +111,11 @@ def match(f, cmd):
         return f.cmdname == cmd
 
 
-
+def _process_cmd(msg, target, source, bot):
+    return bot.users[source]
 
 def process_cmd(msg, source, target, serv, channels, callback):
-    # [ ] check if the user is muted
+    # [ ] check if the user bis muted
     # [X] retrieve function registry
     # [X] get matching cmdnames
     if msg[0] in core.server_config['commands']['cmdprefix'] and len(msg) > 1:
